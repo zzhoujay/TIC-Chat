@@ -20,12 +20,15 @@ open class BaseFragment : Fragment() {
         }
     }
 
-    fun notice(t: BaseActivity.() -> Unit) {
-        notifier?.notice(t)
-    }
-
-    fun noticeToolBarActivity(t: ToolBarActivity.() -> Unit) {
+    fun <T:BaseActivity> notice(t: T.() -> Unit) {
         notifier?.notice(t as BaseActivity.() -> Unit)
     }
 
+    fun setTitle(title:String){
+        activity?.title=title
+    }
+
+    fun setTitle(res:Int){
+        activity?.setTitle(res)
+    }
 }

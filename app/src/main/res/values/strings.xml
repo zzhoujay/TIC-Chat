@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">TIC-Chat</string>
 
     <string name="text_login_title">登陆</string>
@@ -14,4 +14,8 @@
     <string name="text_register_repeat_password">重复输入密码</string>
     <string name="text_register_action">注册</string>
     <string name="text_register_goto_login">已经有账号了？去登陆</string>
+
+    <!--<string name="error_account_length">账号必须在%d-%d之间</string>-->
+    <!--<string name="error_password_length">账号必须在%d-%d之间</string>-->
+    <string name="error_password_repeat">两次输入的密码不一致</string>
 </resources>

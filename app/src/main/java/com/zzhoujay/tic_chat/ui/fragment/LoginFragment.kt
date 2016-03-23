@@ -26,13 +26,13 @@ class LoginFragment : BaseFragment() {
     var accountOk: Boolean = false
         set(value) {
             field = value
-            account.isErrorEnabled = value
+            account.isErrorEnabled = !value
             loginEnable = value && passwordOk
         }
     var passwordOk: Boolean = false
         set(value) {
             field = value
-            password.isErrorEnabled = value
+            password.isErrorEnabled = !value
             loginEnable = value && accountOk
         }
 
@@ -49,7 +49,7 @@ class LoginFragment : BaseFragment() {
         account.editText!!.addTextChangedListener(object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable?) {
                 var a = s?.toString() ?: ""
-                accountOk = a.length <= Configuration.Profile.minAccount && a.length >= Configuration.Profile.maxAccount
+                accountOk = a.length >= Configuration.Profile.minAccount && a.length <= Configuration.Profile.maxAccount
                 if (!accountOk) {
                     account.error="请输入合法的账号"
 //                    account.error = getString(R.string.error_account_length, Configuration.Profile.minAccount, Configuration.Profile.maxAccount)
@@ -60,7 +60,7 @@ class LoginFragment : BaseFragment() {
         password.editText!!.addTextChangedListener(object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable?) {
                 var a = s?.toString() ?: ""
-                passwordOk = a.length <= Configuration.Profile.minPassword && a.length >= Configuration.Profile.maxPassword
+                passwordOk = a.length >= Configuration.Profile.minPassword && a.length <= Configuration.Profile.maxPassword
                 if (!accountOk) {
                     password.error="请输入合法的密码"
 //                    account.error = getString(R.string.error_password_length, Configuration.Profile.minPassword, Configuration.Profile.maxPassword)

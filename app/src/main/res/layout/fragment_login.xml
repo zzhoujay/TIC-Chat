@@ -27,6 +27,7 @@
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/loginAction"
         style="@style/SubmitButton"
+        android:enabled="false"
         android:text="@string/text_login_action" />
 
     <android.support.v7.widget.AppCompatTextView

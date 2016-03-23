@@ -28,6 +28,7 @@ class App : Application() {
         super.onCreate()
         app = this
 
+        Dexter.initialize(this)
 
         Dexter.checkPermission(object : PermissionListener {
             override fun onPermissionGranted(response: PermissionGrantedResponse?) {

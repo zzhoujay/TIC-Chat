@@ -13,6 +13,7 @@ import org.jetbrains.anko.onClick
  */
 class LoginFragment : BaseFragment() {
 
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.fragment_login, container, false)
     }

@@ -6,7 +6,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        
+        <item name="tool_bar_color">@color/colorPrimary</item>
 
+        <item name="android:statusBarColor" tools:ignore="NewApi">?attr/colorPrimaryDark</item>
         <item name="android:windowTranslucentStatus" tools:ignore="NewApi">true</item>
     </style>
 
@@ -14,6 +17,8 @@
         <item name="colorPrimary">@color/colorPrimaryLogin</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkLogin</item>
         <item name="colorAccent">@color/colorAccentLogin</item>
+
+        <item name="android:background">@color/colorPrimaryLogin</item>
     </style>
 
     <style name="InputLayout">
@@ -37,7 +42,7 @@
 
     <style name="ToolBarShadow">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">3dp</item>
+        <item name="android:layout_height">4dp</item>
         <item name="android:layout_marginTop">?actionBarSize</item>
         <item name="android:background">@drawable/support_tool_bar_shadow</item>
     </style>
@@ -45,7 +50,7 @@
     <style name="LinkedTextView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_margin">20dp</item>
+        <item name="android:layout_margin">10dp</item>
         <item name="android:padding">5dp</item>
         <item name="android:clickable">true</item>
         <item name="android:gravity">center</item>

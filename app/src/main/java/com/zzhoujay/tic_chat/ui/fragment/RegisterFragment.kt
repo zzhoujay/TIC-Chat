@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.zzhoujay.tic_chat.R
+import kotlinx.android.synthetic.main.fragment_register.*
+import org.jetbrains.anko.onClick
 
 /**
  * Created by zhou on 16-3-23.
@@ -18,5 +20,10 @@ class RegisterFragment : BaseFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        gotoLogin.onClick {
+            noticeToolBarActivity {
+                currFragment = LoginFragment()
+            }
+        }
     }
 }

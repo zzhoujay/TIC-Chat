@@ -7,4 +7,6 @@
     <color name="colorPrimaryLogin">@color/material_lightGreen_500</color>
     <color name="colorPrimaryDarkLogin">@color/material_lightGreen_600</color>
     <color name="colorAccentLogin">@color/material_grey_400</color>
+    
+    <color name="colorShadowStart">#70555555</color>
 </resources>

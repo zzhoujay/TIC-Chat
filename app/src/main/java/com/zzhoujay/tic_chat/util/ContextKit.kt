@@ -1,5 +1,7 @@
 package com.zzhoujay.tic_chat.util
 
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.shapes.RectShape
 import android.support.v4.app.Fragment
 import android.text.Editable
 import android.text.TextWatcher

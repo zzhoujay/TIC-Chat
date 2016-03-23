@@ -1,5 +1,8 @@
 package com.zzhoujay.tic_chat.ui.activity
 
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.ShapeDrawable
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.MenuItem
@@ -32,6 +35,10 @@ open class ToolBarActivity : BaseActivity() {
 
         setSupportActionBar(toolBar)
         supportActionBar?.setDisplayShowTitleEnabled(true)
+
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//            shadow.background = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, intArrayOf(R.color.colorPrimaryLogin, android.R.color.transparent))
+//        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

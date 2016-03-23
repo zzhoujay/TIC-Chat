@@ -23,5 +23,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize" />
 
-    <View style="@style/ToolBarShadow" />
+    <View
+        android:id="@+id/shadow"
+        style="@style/ToolBarShadow" />
 </FrameLayout>

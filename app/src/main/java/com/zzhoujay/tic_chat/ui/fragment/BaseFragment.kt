@@ -3,7 +3,6 @@ package com.zzhoujay.tic_chat.ui.fragment
 import android.content.Context
 import android.support.v4.app.Fragment
 import com.zzhoujay.tic_chat.ui.activity.BaseActivity
-import com.zzhoujay.tic_chat.ui.activity.ToolBarActivity
 import com.zzhoujay.tic_chat.util.Notifier
 
 /**
@@ -20,15 +19,15 @@ open class BaseFragment : Fragment() {
         }
     }
 
-    fun <T:BaseActivity> notice(t: T.() -> Unit) {
+    fun <T : BaseActivity> notice(t: T.() -> Unit) {
         notifier?.notice(t as BaseActivity.() -> Unit)
     }
 
-    fun setTitle(title:String){
-        activity?.title=title
+    fun setTitle(title: String) {
+        activity?.title = title
     }
 
-    fun setTitle(res:Int){
+    fun setTitle(res: Int) {
         activity?.setTitle(res)
     }
 }

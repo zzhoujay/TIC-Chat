@@ -6,10 +6,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        
+
         <item name="tool_bar_color">@color/colorPrimary</item>
 
-        <item name="android:statusBarColor" tools:ignore="NewApi">?attr/colorPrimaryDark</item>
         <item name="android:windowTranslucentStatus" tools:ignore="NewApi">true</item>
     </style>
 
@@ -19,6 +18,14 @@
         <item name="colorAccent">@color/colorAccentLogin</item>
 
         <item name="android:background">@color/colorPrimaryLogin</item>
+    </style>
+
+    <style name="AppTheme.Home">
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
     </style>
 
     <style name="InputLayout">

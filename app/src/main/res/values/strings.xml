@@ -6,7 +6,7 @@
     <string name="text_login_password">密码</string>
     <string name="text_login_action">登陆</string>
     <string name="text_login_goto_register">还没有账号？去注册</string>
-    
+
     <string name="text_register_title">注册</string>
     <string name="text_register_account">账号</string>
     <string name="text_register_email">邮箱</string>
@@ -15,7 +15,23 @@
     <string name="text_register_action">注册</string>
     <string name="text_register_goto_login">已经有账号了？去登陆</string>
 
+    <string name="title_topic">讨论</string>
+    <string name="title_message">消息</string>
+    <string name="title_profile">资料</string>
+
+    <string-array name="home_tabs">
+        <item>@string/title_topic</item>
+        <item>@string/title_message</item>
+        <item>@string/title_profile</item>
+    </string-array>
+
     <!--<string name="error_account_length">账号必须在%d-%d之间</string>-->
     <!--<string name="error_password_length">账号必须在%d-%d之间</string>-->
     <string name="error_password_repeat">两次输入的密码不一致</string>
+
+    <string-array name="topic_type">
+        <item>Android</item>
+        <item>Java</item>
+        <item>Python</item>
+    </string-array>
 </resources>

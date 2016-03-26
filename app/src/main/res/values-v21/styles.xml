@@ -26,4 +26,9 @@
 
         <item name="android:statusBarColor">?attr/colorPrimaryDark</item>
     </style>
+
+    <style name="Clickable">
+        <item name="android:clickable">true</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
 </resources>

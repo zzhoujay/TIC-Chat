@@ -19,6 +19,8 @@
     <string name="title_message">消息</string>
     <string name="title_profile">资料</string>
 
+    <string name="title_detail">详情</string>
+
     <string-array name="home_tabs">
         <item>@string/title_topic</item>
         <item>@string/title_message</item>
@@ -28,6 +30,15 @@
     <!--<string name="error_account_length">账号必须在%d-%d之间</string>-->
     <!--<string name="error_password_length">账号必须在%d-%d之间</string>-->
     <string name="error_password_repeat">两次输入的密码不一致</string>
+    <string name="test_content">去年夏天我们启动了 Android Experiments ：一个用于展示创新性 Android 作品的项目。所有开发者都可以提交你的创意作品，通过后将加入到网站收录中。目前为止，我们见到了许多来自开发者社区的惊人作品，从动态壁纸到表盘，再到 IOIO 板子的有趣玩法，我们期望看到更多这种作品。  今天我们宣布 Android Experiments I/O 挑战赛：一个让你的作品(和你)参加 I/O 2016 的机会！</string>
+    <string name="test_title">2016 Android Experiments I/O 挑战赛!</string>
+    <string name="text_loading">加载中…</string>
+    <string name="text_cancel">取消</string>
+    <string name="text_click_load_more">点击加载更多</string>
+    <string name="test_reply">说得真好!!!</string>
+    <string name="test_time">两天前</string>
+    <string name="test_message">xxx在yyy主题回复了你</string>
+    <string name="test_name">xxx</string>
 
     <string-array name="topic_type">
         <item>Android</item>

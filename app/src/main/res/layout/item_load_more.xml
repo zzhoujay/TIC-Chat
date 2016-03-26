@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ThemeOverlay.AppCompat.Dark"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/design_snackbar_background"
+    android:padding="5dp">
+
+    <FrameLayout
+        android:id="@+id/layoutLoading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/loadMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:maxLines="2"
+            android:text="@string/text_loading"
+            android:textAppearance="@style/TextAppearance.Design.Snackbar.Message"
+            android:textColor="@color/abc_primary_text_material_dark"
+            android:textSize="@dimen/font_content" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleInverse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|start"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/cancel_action"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|end"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="@string/text_cancel"
+            android:textColor="?attr/colorAccent"
+            android:textSize="@dimen/font_content" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/layoutLoadMore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/load_more_action"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/text_click_load_more"
+            android:textColor="@color/material_Lime_500"
+            android:textSize="@dimen/font_content" />
+
+    </FrameLayout>
+
+
+</FrameLayout>

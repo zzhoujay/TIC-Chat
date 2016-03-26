@@ -32,8 +32,13 @@
             android:name=".ui.activity.LoginActivity"
             android:theme="@style/AppTheme.Login" />
 
-        <activity android:name=".ui.activity.HomeActivity"
-            android:theme="@style/AppTheme.Home"/>
+        <activity
+            android:name=".ui.activity.HomeActivity"
+            android:theme="@style/AppTheme.Home" />
+
+        <activity
+            android:name=".ui.activity.TopicDetailActivity"
+            android:theme="@style/AppTheme.Detail" />
 
         <receiver android:name=".receiver.PushMessageReceiver">
             <intent-filter>

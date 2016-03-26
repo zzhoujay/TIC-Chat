@@ -1,5 +1,6 @@
 package com.zzhoujay.tic_chat.util
 
+import android.animation.Animator
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.shapes.RectShape
 import android.support.v4.app.Fragment
@@ -28,5 +29,19 @@ open class SimpleTextWatcher: TextWatcher {
     }
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+    }
+}
+
+open class SimpleAnimatorListener: Animator.AnimatorListener{
+    override fun onAnimationRepeat(animation: Animator?) {
+    }
+
+    override fun onAnimationEnd(animation: Animator?) {
+    }
+
+    override fun onAnimationCancel(animation: Animator?) {
+    }
+
+    override fun onAnimationStart(animation: Animator?) {
     }
 }

@@ -20,12 +20,18 @@
         <item name="android:background">@color/colorPrimaryLogin</item>
     </style>
 
-    <style name="AppTheme.Home">
+    <style name="AppTheme.Home" parent="Theme.AppCompat.Light.NoActionBar">
 
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
+    </style>
+
+    <style name="AppTheme.Detail" parent="AppTheme.Home">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
     </style>
 
     <style name="InputLayout">
@@ -62,6 +68,18 @@
         <item name="android:padding">5dp</item>
         <item name="android:clickable">true</item>
         <item name="android:gravity">center</item>
+    </style>
+
+    <style name="Clickable">
+        <item name="android:clickable">true</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="Gap">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:background">@color/material_grey_400</item>
     </style>
 
 </resources>

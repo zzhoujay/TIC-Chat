@@ -7,7 +7,7 @@ import android.support.v4.view.PagerAdapter
 import android.view.View
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.ui.fragment.BaseFragment
-import com.zzhoujay.tic_chat.ui.fragment.MessagesFragment
+import com.zzhoujay.tic_chat.ui.fragment.MessageFragment
 import com.zzhoujay.tic_chat.ui.fragment.ProfileFragment
 import com.zzhoujay.tic_chat.ui.fragment.TopicsFragment
 import kotlinx.android.synthetic.main.activity_home.*
@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_home.*
  */
 class HomeActivity : BaseActivity() {
 
-    val fragments: Array<Fragment> by lazy { arrayOf<Fragment>(TopicsFragment(), MessagesFragment(), ProfileFragment()) }
+    val fragments: Array<Fragment> by lazy { arrayOf<Fragment>(TopicsFragment(), MessageFragment(), ProfileFragment()) }
     val tabTitles: Array<String> by lazy { resources.getStringArray(R.array.home_tabs) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +42,7 @@ class HomeActivity : BaseActivity() {
             }
         }
 
-        viewPager.adapter=adapter
+        viewPager.adapter = adapter
         tabLayout.setupWithViewPager(viewPager)
     }
 }

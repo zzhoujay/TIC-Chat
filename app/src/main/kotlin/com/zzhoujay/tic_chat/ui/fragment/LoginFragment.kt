@@ -2,13 +2,19 @@ package com.zzhoujay.tic_chat.ui.fragment
 
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import cn.bmob.v3.BmobUser
+import cn.bmob.v3.exception.BmobException
+import cn.bmob.v3.listener.LogInListener
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.common.Configuration
+import com.zzhoujay.tic_chat.data.User
 import com.zzhoujay.tic_chat.ui.activity.ToolBarActivity
 import com.zzhoujay.tic_chat.util.SimpleTextWatcher
+import com.zzhoujay.tic_chat.util.progress
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.jetbrains.anko.enabled
 import org.jetbrains.anko.onClick
@@ -51,8 +57,8 @@ class LoginFragment : BaseFragment() {
                 var a = s?.toString() ?: ""
                 accountOk = a.length >= Configuration.Profile.minAccount && a.length <= Configuration.Profile.maxAccount
                 if (!accountOk) {
-                    account.error="请输入合法的账号"
-//                    account.error = getString(R.string.error_account_length, Configuration.Profile.minAccount, Configuration.Profile.maxAccount)
+                    account.error = "请输入合法的账号"
+                    //                    account.error = getString(R.string.error_account_length, Configuration.Profile.minAccount, Configuration.Profile.maxAccount)
                 }
             }
         })
@@ -62,8 +68,8 @@ class LoginFragment : BaseFragment() {
                 var a = s?.toString() ?: ""
                 passwordOk = a.length >= Configuration.Profile.minPassword && a.length <= Configuration.Profile.maxPassword
                 if (!accountOk) {
-                    password.error="请输入合法的密码"
-//                    account.error = getString(R.string.error_password_length, Configuration.Profile.minPassword, Configuration.Profile.maxPassword)
+                    password.error = "请输入合法的密码"
+                    //                    account.error = getString(R.string.error_password_length, Configuration.Profile.minPassword, Configuration.Profile.maxPassword)
                 }
             }
         })
@@ -75,7 +81,18 @@ class LoginFragment : BaseFragment() {
         }
 
         loginAction.onClick {
+            val ac = account.editText!!.text.toString()
+            val pd = password.editText!!.text.toString()
 
+            progress(false, "登陆中。。。") {
+
+                BmobUser.loginByAccount(context, ac, pd, object : LogInListener<User>() {
+                    override fun done(p0: User?, p1: BmobException?) {
+                        Log.i("done", p0.toString(), p1)
+                        dismiss()
+                    }
+                })
+            }
         }
 
     }

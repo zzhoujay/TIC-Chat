@@ -4,12 +4,20 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.zzhoujay.tic_chat.R
+import com.zzhoujay.tic_chat.data.Topic
 import com.zzhoujay.tic_chat.ui.adapter.holder.TopicHolder
+import java.util.*
 
 /**
  * Created by zhou on 16-3-26.
  */
 class TopicAdapter(val size: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    val topics: MutableList<Topic>
+
+    init {
+        topics = ArrayList<Topic>()
+    }
 
     var onTopicClickListener: ((position: Int) -> Unit)? = null
 

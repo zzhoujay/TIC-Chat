@@ -5,10 +5,17 @@ import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import cn.bmob.v3.BmobInstallation
+import cn.bmob.v3.BmobUser
+import cn.bmob.v3.datatype.BmobPointer
+import cn.bmob.v3.listener.SaveListener
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.common.Configuration
+import com.zzhoujay.tic_chat.data.User
 import com.zzhoujay.tic_chat.ui.activity.ToolBarActivity
 import com.zzhoujay.tic_chat.util.SimpleTextWatcher
+import com.zzhoujay.tic_chat.util.progress
+import com.zzhoujay.tic_chat.util.toast
 import kotlinx.android.synthetic.main.fragment_register.*
 import org.jetbrains.anko.enabled
 import org.jetbrains.anko.onClick
@@ -63,8 +70,8 @@ class RegisterFragment : BaseFragment() {
                 var a = s?.toString() ?: ""
                 accountOk = a.length >= Configuration.Profile.minAccount && a.length <= Configuration.Profile.maxAccount
                 if (!accountOk) {
-                    account.error="请输入合法的账号"
-//                    account.error = getString(R.string.error_account_length, Configuration.Profile.minAccount, Configuration.Profile.maxAccount)
+                    account.error = "请输入合法的账号"
+                    //                    account.error = getString(R.string.error_account_length, Configuration.Profile.minAccount, Configuration.Profile.maxAccount)
                 }
             }
         })
@@ -74,8 +81,8 @@ class RegisterFragment : BaseFragment() {
                 var a = s?.toString() ?: ""
                 passwordOk = a.length >= Configuration.Profile.minPassword && a.length <= Configuration.Profile.maxPassword
                 if (!accountOk) {
-                    password.error="请输入合法的密码"
-//                    account.error = getString(R.string.error_password_length, Configuration.Profile.minPassword, Configuration.Profile.maxPassword)
+                    password.error = "请输入合法的密码"
+                    //                    account.error = getString(R.string.error_password_length, Configuration.Profile.minPassword, Configuration.Profile.maxPassword)
                 }
             }
         })
@@ -97,6 +104,28 @@ class RegisterFragment : BaseFragment() {
         }
 
         registerAction.onClick {
+
+            progress(false, "注册中。。。") {
+
+                val ac = account.editText!!.text.toString()
+                val pd = password.editText!!.text.toString()
+
+                val user = User(null)
+                user.username = ac
+                user.setPassword(pd)
+
+                user.signUp(context, object : SaveListener() {
+                    override fun onSuccess() {
+                        toast("success")
+                        dismiss()
+                    }
+
+                    override fun onFailure(p0: Int, p1: String?) {
+                        toast("code:$p0,msg:$p1")
+                        dismiss()
+                    }
+                })
+            }
 
         }
     }

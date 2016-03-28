@@ -3,20 +3,46 @@ package com.zzhoujay.tic_chat.data
 import cn.bmob.v3.BmobInstallation
 import cn.bmob.v3.BmobObject
 import cn.bmob.v3.BmobUser
+import cn.bmob.v3.datatype.BmobPointer
 import com.zzhoujay.tic_chat.App
 
 /**
  * Created by zhou on 16-3-24.
  */
 
-class User() : BmobUser()
+class User(var profile: Profile?) : BmobUser(){
 
-class Profilr(var name: String = "", var qq: String = "") : BmobObject()
 
-class Category(var name: String = "") : BmobObject()
+}
 
-class Topic(var title: String = "", var content: String = "", var reply: Int = 0, var good: Int = 0, var user: User, var category: Category) : BmobObject()
+class Profile(var name: String = "", var qq: String = "") : BmobObject(){
+    override fun toString(): String{
+        return "Profile(name='$name', qq='$qq')"
+    }
+}
 
-class Reply(var content: String = "", var quote: String? = null, var user: User, var topic: Topic) : BmobObject()
+class Category(var name: String = "") : BmobObject(){
+    override fun toString(): String{
+        return "Category(name='$name')"
+    }
+}
 
-class Installation(var userId: String) : BmobInstallation(App.app)
+class Topic(var title: String = "", var content: String = "", var reply: Int = 0, var author: User, var category: Category) : BmobObject(){
+    override fun toString(): String{
+        return "Topic(title='$title', content='$content', reply=$reply, author=$author, category=$category)"
+    }
+}
+
+class Reply(var content: String = "", var quote: Reply? = null, var author: User, var topic: Topic) : BmobObject(){
+
+    override fun toString(): String{
+        return "Reply(content='$content', quote=$quote, author=$author, topic=$topic)"
+    }
+}
+
+class Installation(var user: User?) : BmobInstallation(App.app){
+
+    override fun toString(): String{
+        return "Installation(user=$user)"
+    }
+}

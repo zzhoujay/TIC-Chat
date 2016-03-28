@@ -12,4 +12,9 @@ object Configuration {
         const val maxPassword = 15
     }
 
+    object Const{
+
+
+    }
+
 }

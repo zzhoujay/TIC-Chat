@@ -5,9 +5,13 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import cn.bmob.v3.BmobQuery
+import cn.bmob.v3.listener.FindListener
 import com.zzhoujay.tic_chat.R
+import com.zzhoujay.tic_chat.data.Topic
 import com.zzhoujay.tic_chat.ui.adapter.ReplyAdapter
 import com.zzhoujay.tic_chat.ui.adapter.TopicDetailAdapter
+import com.zzhoujay.tic_chat.util.loading
 import kotlinx.android.synthetic.main.layout_recycler_view.*
 
 /**
@@ -28,7 +32,9 @@ class TopicDetailFragment : BaseFragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = topicDetailAdapter
 
+
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

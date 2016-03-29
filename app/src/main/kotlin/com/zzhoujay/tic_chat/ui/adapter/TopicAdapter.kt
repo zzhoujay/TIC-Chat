@@ -6,14 +6,15 @@ import android.view.ViewGroup
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.data.Topic
 import com.zzhoujay.tic_chat.ui.adapter.holder.TopicHolder
+import com.zzhoujay.tic_chat.util.merge
 import java.util.*
 
 /**
  * Created by zhou on 16-3-26.
  */
-class TopicAdapter(val size: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TopicAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    val topics: MutableList<Topic>
+    private val topics: MutableList<Topic>
 
     init {
         topics = ArrayList<Topic>()
@@ -32,11 +33,26 @@ class TopicAdapter(val size: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     override fun getItemCount(): Int {
-        return size
+        return topics.size
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
     }
 
+    fun addTopic(ts: List<Topic>?) {
+        val t = topics.merge(ts)
+        if (t != null) {
+            val s = itemCount
+            topics.addAll(t)
+            notifyItemRangeInserted(s, t.size)
+        }
+    }
+
+    fun resetTopic(ts: List<Topic>?) {
+        topics.clear()
+        if (ts != null)
+            topics.addAll(ts)
+        notifyDataSetChanged()
+    }
 
 }

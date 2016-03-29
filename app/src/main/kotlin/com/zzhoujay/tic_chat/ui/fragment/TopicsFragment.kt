@@ -13,6 +13,7 @@ import com.zzhoujay.tic_chat.ui.activity.TopicDetailActivity
 import com.zzhoujay.tic_chat.ui.adapter.SpinnerAdapter
 import com.zzhoujay.tic_chat.ui.adapter.TopicAdapter
 import com.zzhoujay.tic_chat.util.loading
+import com.zzhoujay.tic_chat.util.toast
 import kotlinx.android.synthetic.main.layout_recycler_view.*
 import org.jetbrains.anko.startActivity
 
@@ -22,7 +23,7 @@ import org.jetbrains.anko.startActivity
 class TopicsFragment : BaseFragment() {
 
     val topicAdapter: TopicAdapter by lazy {
-        val a = TopicAdapter(10)
+        val a = TopicAdapter()
         a.onTopicClickListener = {
             context.startActivity<TopicDetailActivity>()
         }
@@ -43,22 +44,32 @@ class TopicsFragment : BaseFragment() {
         recyclerView.post({
             refresh()
         })
+
+        swipeRefreshLayout.setOnRefreshListener {
+            refresh()
+        }
     }
 
-    fun refresh(){
+    fun refresh() {
         loading(swipeRefreshLayout) {
             val query = BmobQuery<Topic>()
             query.setLimit(12)
             query.order("-updatedAt")
             query.findObjects(context, object : FindListener<Topic>() {
-                override fun onError(p0: Int, p1: String?) {
+                override fun onError(code: Int, msg: String?) {
+                    toast("code:$code,msg:$msg")
                 }
 
                 override fun onSuccess(ts: MutableList<Topic>?) {
+                    topicAdapter.resetTopic(ts)
                 }
 
             })
         }
+    }
+
+    fun loadMore(){
+
     }
 
     override fun onDestroyView() {

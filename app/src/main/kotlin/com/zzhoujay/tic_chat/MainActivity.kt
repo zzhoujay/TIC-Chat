@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         start.onClick {
-            startActivity<LoginActivity>()
+            startActivity<HomeActivity>()
         }
     }
 }

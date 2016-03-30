@@ -2,6 +2,7 @@ package com.zzhoujay.tic_chat.ui.fragment
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import com.zzhoujay.tic_chat.data.Topic
 import com.zzhoujay.tic_chat.ui.activity.TopicDetailActivity
 import com.zzhoujay.tic_chat.ui.adapter.SpinnerAdapter
 import com.zzhoujay.tic_chat.ui.adapter.TopicAdapter
+import com.zzhoujay.tic_chat.ui.adapter.holder.LoadMoreHolder
 import com.zzhoujay.tic_chat.util.loading
 import com.zzhoujay.tic_chat.util.toast
 import kotlinx.android.synthetic.main.layout_recycler_view.*
@@ -26,11 +28,22 @@ class TopicsFragment : BaseFragment() {
     val topicAdapter: TopicAdapter by lazy {
         val a = TopicAdapter()
         a.onTopicClickListener = {
-            context.startActivity<TopicDetailActivity>()
+            context.startActivity<TopicDetailActivity>(Topic.TOPIC to it)
         }
+        a.realPosition = { it - spinnerAdapter.headerCount() }
         a
     }
-    val spinnerAdapter: SpinnerAdapter by lazy { SpinnerAdapter(topicAdapter) }
+    val spinnerAdapter: SpinnerAdapter by lazy {
+        val s = SpinnerAdapter(topicAdapter)
+        s.onStatusChangeListener = {
+            when (it) {
+                LoadMoreHolder.State.loading -> {
+                    loadMore()
+                }
+            }
+        }
+        s
+    }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.layout_recycler_view, container, false)
@@ -49,20 +62,26 @@ class TopicsFragment : BaseFragment() {
         swipeRefreshLayout.setOnRefreshListener {
             refresh()
         }
+
     }
 
     fun refresh() {
         loading(swipeRefreshLayout) {
             val query = BmobQuery<Topic>()
+            spinnerAdapter.resetState()
             query.setLimit(Configuration.Page.default_size)
             query.order("-updatedAt")
+            query.include("author.profile")
             query.findObjects(context, object : FindListener<Topic>() {
                 override fun onError(code: Int, msg: String?) {
-                    toast("code:$code,msg:$msg")
+                    Log.i("onError", "code:$code,msg:$msg")
+                    isRefreshing = false
                 }
 
                 override fun onSuccess(ts: MutableList<Topic>?) {
+                    Log.i("onSuccess", "ts:$ts")
                     topicAdapter.resetTopic(ts)
+                    isRefreshing = false
                 }
             })
         }
@@ -71,15 +90,21 @@ class TopicsFragment : BaseFragment() {
     fun loadMore() {
         var query = BmobQuery<Topic>()
         query.setSkip(topicAdapter.itemCount)
-        query.setLimit(Configuration.Page.default_size)
+        val size = Configuration.Page.default_size
+        query.setLimit(size)
         query.order("-updatedAt")
+        query.include("author.profile")
         query.findObjects(context, object : FindListener<Topic>() {
-            override fun onError(p0: Int, p1: String?) {
-                toast("code:$code,msg:$msg")
+            override fun onError(code: Int, msg: String?) {
+                Log.i("onError", "code:$code,msg:$msg")
+                spinnerAdapter.state = LoadMoreHolder.State.error
             }
 
             override fun onSuccess(p0: MutableList<Topic>?) {
+                Log.i("onSuccess", "ts:$p0")
+                val nomoreData = p0?.size ?: 0 < size
                 topicAdapter.addTopic(p0)
+                spinnerAdapter.state = if (nomoreData) LoadMoreHolder.State.nomore else LoadMoreHolder.State.ready
             }
         })
     }

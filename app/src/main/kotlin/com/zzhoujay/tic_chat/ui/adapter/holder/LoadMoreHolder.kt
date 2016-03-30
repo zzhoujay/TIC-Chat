@@ -1,6 +1,5 @@
 package com.zzhoujay.tic_chat.ui.adapter.holder
 
-import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.support.v7.widget.RecyclerView
@@ -8,7 +7,7 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import android.widget.FrameLayout
-import com.zzhoujay.tic_chat.util.SimpleAnimatorListener
+import com.zzhoujay.tic_chat.R
 import kotlinx.android.synthetic.main.item_load_more.view.*
 import org.jetbrains.anko.onClick
 
@@ -21,6 +20,33 @@ class LoadMoreHolder(val root: View) : RecyclerView.ViewHolder(root) {
     val loadMoreAction: Button
     val layoutLoading: FrameLayout
     val layoutLoadMore: FrameLayout
+
+    var state: State = State.ready
+        set(value) {
+            when (value) {
+                State.loading->{
+                    isLoading=true
+                }
+                State.ready -> {
+                    loadMoreAction.setText(R.string.text_click_load_more)
+                    loadMoreAction.isClickable = true
+                    isLoading=false
+                }
+                State.nomore -> {
+                    loadMoreAction.setText(R.string.text_click_no_more)
+                    loadMoreAction.isClickable = false
+                    isLoading=false
+                }
+                State.error -> {
+                    loadMoreAction.setText(R.string.text_click_retry)
+                    loadMoreAction.isClickable = true
+                    isLoading=false
+                }
+            }
+            field = value
+            switchLayout()
+        }
+
     var isLoading: Boolean
         get() = layoutLoading.visibility == View.VISIBLE
         set(value) {
@@ -28,15 +54,8 @@ class LoadMoreHolder(val root: View) : RecyclerView.ViewHolder(root) {
             layoutLoadMore.visibility = if (value) View.INVISIBLE else View.VISIBLE
         }
 
-    var loadingStateChangeListener: ((isLoading: Boolean) -> Unit)? = null
+    var loadingStateChangeListener: ((state: State) -> Unit)? = null
 
-    val switchAnimatorListener: SimpleAnimatorListener by lazy {
-        object : SimpleAnimatorListener() {
-            override fun onAnimationEnd(animation: Animator?) {
-                isLoading = !isLoading
-            }
-        }
-    }
 
     init {
         cancelAction = root.cancel_action
@@ -45,13 +64,17 @@ class LoadMoreHolder(val root: View) : RecyclerView.ViewHolder(root) {
         loadMoreAction = root.load_more_action
 
         cancelAction.onClick {
-            switchLayout()
-            loadingStateChangeListener?.invoke(isLoading)
+            if (state == State.loading) {
+                state = State.ready
+            }
+            loadingStateChangeListener?.invoke(state)
         }
 
         loadMoreAction.onClick {
-            switchLayout()
-            loadingStateChangeListener?.invoke(isLoading)
+            if (state == State.ready || state == State.error) {
+                state = State.loading
+            }
+            loadingStateChangeListener?.invoke(state)
         }
 
     }
@@ -61,7 +84,7 @@ class LoadMoreHolder(val root: View) : RecyclerView.ViewHolder(root) {
         val hiddenAnim: ObjectAnimator
         val showView: View
         val hiddenView: View
-        if (isLoading) {
+        if (!isLoading) {
             showView = layoutLoadMore
             hiddenView = layoutLoading
         } else {
@@ -70,16 +93,18 @@ class LoadMoreHolder(val root: View) : RecyclerView.ViewHolder(root) {
         }
         showAnim = ObjectAnimator.ofFloat(showView, "alpha", 0f, 1f)
         hiddenAnim = ObjectAnimator.ofFloat(hiddenView, "alpha", 1f, 0f)
-        showAnim.duration = 500
-        hiddenAnim.duration = 500
+        showAnim.duration = 200
+        hiddenAnim.duration = 300
         showAnim.interpolator = AccelerateDecelerateInterpolator()
         hiddenAnim.interpolator = AccelerateDecelerateInterpolator()
-
-        hiddenAnim.addListener(switchAnimatorListener)
 
         val set = AnimatorSet()
         set.play(hiddenAnim).before(showAnim)
 
         set.start()
+    }
+
+    enum class State {
+        loading, ready, nomore, error
     }
 }

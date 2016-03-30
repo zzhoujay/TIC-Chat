@@ -29,6 +29,10 @@ class TopicDetailFragment : BaseFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (arguments.containsKey(Topic.TOPIC)) {
+            topicDetailAdapter.topic = arguments.getSerializable(Topic.TOPIC) as Topic
+        }
+
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = topicDetailAdapter
 

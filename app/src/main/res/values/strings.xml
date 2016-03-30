@@ -35,6 +35,8 @@
     <string name="text_loading">加载中…</string>
     <string name="text_cancel">取消</string>
     <string name="text_click_load_more">点击加载更多</string>
+    <string name="text_click_no_more">没有更多数据了</string>
+    <string name="text_click_retry">加载失败，点击重试</string>
     <string name="test_reply">说得真好!!!</string>
     <string name="test_time">两天前</string>
     <string name="test_message">xxx在yyy主题回复了你</string>

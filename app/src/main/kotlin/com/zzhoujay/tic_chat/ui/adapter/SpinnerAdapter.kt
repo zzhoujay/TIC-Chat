@@ -11,10 +11,10 @@ import com.zzhoujay.tic_chat.ui.adapter.holder.SpinnerHolder
 /**
  * Created by zhou on 16-3-26.
  */
-class SpinnerAdapter : LoadMoreableAdapter {
+class SpinnerAdapter : LoadMoreAdapter {
 
     override fun onFooterBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
-
+        super.onFooterBindViewHolder(holder, position)
     }
 
     constructor(childAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>) : super(childAdapter) {
@@ -32,7 +32,6 @@ class SpinnerAdapter : LoadMoreableAdapter {
     }
 
     override fun onHeaderBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
     }
 
 }

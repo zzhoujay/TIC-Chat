@@ -6,11 +6,13 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.shapes.RectShape
+import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
+import java.io.Serializable
 
 /**
  * Created by zhou on 16-3-23.
@@ -44,6 +46,18 @@ fun Fragment.progress(cancelAble: Boolean, msg: CharSequence, t: Dialog.() -> Un
 fun Fragment.loading(srl: SwipeRefreshLayout, t: SwipeRefreshLayout.() -> Unit) {
     srl.isRefreshing = true
     t.invoke(srl)
+}
+
+fun Fragment.withArguments(vararg args: Pair<String, Serializable>) {
+    val bundle = Bundle()
+    for (p in args) {
+        bundle.putSerializable(p.first, p.second)
+    }
+    arguments = bundle
+}
+
+interface RealPosition {
+    fun realPosition(): (position: Int) -> Int
 }
 
 open class SimpleTextWatcher : TextWatcher {

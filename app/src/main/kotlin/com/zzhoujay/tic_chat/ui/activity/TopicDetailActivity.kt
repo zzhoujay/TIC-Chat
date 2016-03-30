@@ -3,7 +3,9 @@ package com.zzhoujay.tic_chat.ui.activity
 import android.os.Bundle
 import com.jude.swipbackhelper.SwipeBackHelper
 import com.zzhoujay.tic_chat.R
+import com.zzhoujay.tic_chat.data.Topic
 import com.zzhoujay.tic_chat.ui.fragment.TopicDetailFragment
+import com.zzhoujay.tic_chat.util.withArguments
 
 /**
  * Created by zhou on 16-3-26.
@@ -17,7 +19,14 @@ class TopicDetailActivity : ToolBarActivity() {
 
         setTitle(R.string.title_detail)
 
-        currFragment = TopicDetailFragment()
+        val f = TopicDetailFragment()
+
+        if (intent.hasExtra(Topic.TOPIC)) {
+            val topic = intent.getSerializableExtra(Topic.TOPIC)
+            f.withArguments(Topic.TOPIC to topic)
+        }
+
+        currFragment = f
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

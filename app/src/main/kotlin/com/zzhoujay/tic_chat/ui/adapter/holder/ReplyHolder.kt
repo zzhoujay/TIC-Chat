@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.item_reply.view.*
 /**
  * Created by zhou on 16-3-26.
  */
-class ReplayHolder(val root: View) : RecyclerView.ViewHolder(root) {
+class ReplyHolder(val root: View) : RecyclerView.ViewHolder(root) {
 
     val icon: ImageView
     val content: TextView

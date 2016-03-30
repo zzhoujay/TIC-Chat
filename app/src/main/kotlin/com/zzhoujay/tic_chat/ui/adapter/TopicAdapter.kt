@@ -49,7 +49,7 @@ class TopicAdapter() : NormalAdapter() {
 
     fun addTopic(ts: List<Topic>?) {
         val t = topics.merge(ts)
-        if (t != null) {
+        if (t != null && t.size > 0) {
             val s = itemCount
             topics.addAll(t)
             notifyItemRangeInserted(s, t.size)

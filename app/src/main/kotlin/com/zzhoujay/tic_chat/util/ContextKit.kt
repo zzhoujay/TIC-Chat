@@ -9,6 +9,7 @@ import android.graphics.drawable.shapes.RectShape
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
@@ -56,8 +57,27 @@ fun Fragment.withArguments(vararg args: Pair<String, Serializable>) {
     arguments = bundle
 }
 
-interface RealPosition {
-    fun realPosition(): (position: Int) -> Int
+interface DataList<T> {
+    fun add(t: List<T>?)
+    fun reset(t: List<T>?)
+}
+
+class DataListImpl<T>(val ts: MutableList<T>, val adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>) : DataList<T> {
+    override fun add(t: List<T>?) {
+        val r = ts.merge(t)
+        if (r != null && r.size > 0) {
+            val s = adapter.itemCount
+            ts.addAll(r)
+            adapter.notifyItemRangeInserted(s, adapter.itemCount)
+        }
+    }
+
+    override fun reset(t: List<T>?) {
+        ts.clear()
+        if (t != null)
+            ts.addAll(t)
+        adapter.notifyDataSetChanged()
+    }
 }
 
 open class SimpleTextWatcher : TextWatcher {

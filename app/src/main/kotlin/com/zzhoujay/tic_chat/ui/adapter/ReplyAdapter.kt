@@ -7,19 +7,20 @@ import com.bumptech.glide.Glide
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.data.Reply
 import com.zzhoujay.tic_chat.ui.adapter.holder.ReplyHolder
+import com.zzhoujay.tic_chat.util.DataList
+import com.zzhoujay.tic_chat.util.DataListImpl
+import com.zzhoujay.tic_chat.util.merge
 import java.util.*
 import kotlin.reflect.KProperty
 
 /**
  * Created by zhou on 16-3-26.
  */
-class ReplyAdapter(val size: Int) : NormalAdapter() {
+class ReplyAdapter() : NormalAdapter() {
 
     private val replys: MutableList<Reply> by lazy { ArrayList<Reply>() }
 
-    override fun getItemCount(): Int {
-        return size
-    }
+    override fun getItemCount(): Int = replys.size
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
         val holder = ReplyHolder(LayoutInflater.from(parent!!.context).inflate(R.layout.item_reply, parent, false))
@@ -36,10 +37,21 @@ class ReplyAdapter(val size: Int) : NormalAdapter() {
         }
     }
 
-    fun addReply(rs:List<Reply>?){
-        if(rs!=null){
-
+    fun addReply(rs: List<Reply>?) {
+        val r = replys.merge(rs)
+        if (r != null && r.size > 0) {
+            val s = itemCount
+            replys.addAll(r)
+            notifyItemRangeInserted(s, itemCount)
         }
+    }
+
+    fun resetReply(rs: List<Reply>?) {
+        replys.clear()
+        if (rs != null) {
+            replys.addAll(rs)
+        }
+        notifyDataSetChanged()
     }
 
 }

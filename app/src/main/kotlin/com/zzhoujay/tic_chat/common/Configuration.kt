@@ -12,9 +12,13 @@ object Configuration {
         const val maxPassword = 15
     }
 
-    object Const{
+    object Const {
 
 
+    }
+
+    object Page {
+        const val default_size = 12
     }
 
 }

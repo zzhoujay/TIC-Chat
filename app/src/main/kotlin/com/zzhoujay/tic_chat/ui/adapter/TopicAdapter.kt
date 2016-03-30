@@ -37,6 +37,14 @@ class TopicAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
+        if(holder is TopicHolder){
+            val topic=topics[position]
+            holder.title.text=topic.title
+            holder.content.text=topic.content
+            holder.time.text=topic.updatedAt
+            val user=topic.author
+            holder.name.text=user.username
+        }
     }
 
     fun addTopic(ts: List<Topic>?) {

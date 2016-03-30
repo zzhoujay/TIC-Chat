@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import cn.bmob.v3.BmobQuery
 import cn.bmob.v3.listener.FindListener
 import com.zzhoujay.tic_chat.R
+import com.zzhoujay.tic_chat.common.Configuration
 import com.zzhoujay.tic_chat.data.Topic
 import com.zzhoujay.tic_chat.ui.activity.TopicDetailActivity
 import com.zzhoujay.tic_chat.ui.adapter.SpinnerAdapter
@@ -53,7 +54,7 @@ class TopicsFragment : BaseFragment() {
     fun refresh() {
         loading(swipeRefreshLayout) {
             val query = BmobQuery<Topic>()
-            query.setLimit(12)
+            query.setLimit(Configuration.Page.default_size)
             query.order("-updatedAt")
             query.findObjects(context, object : FindListener<Topic>() {
                 override fun onError(code: Int, msg: String?) {
@@ -63,13 +64,24 @@ class TopicsFragment : BaseFragment() {
                 override fun onSuccess(ts: MutableList<Topic>?) {
                     topicAdapter.resetTopic(ts)
                 }
-
             })
         }
     }
 
-    fun loadMore(){
+    fun loadMore() {
+        var query = BmobQuery<Topic>()
+        query.setSkip(topicAdapter.itemCount)
+        query.setLimit(Configuration.Page.default_size)
+        query.order("-updatedAt")
+        query.findObjects(context, object : FindListener<Topic>() {
+            override fun onError(p0: Int, p1: String?) {
+                toast("code:$code,msg:$msg")
+            }
 
+            override fun onSuccess(p0: MutableList<Topic>?) {
+                topicAdapter.addTopic(p0)
+            }
+        })
     }
 
     override fun onDestroyView() {

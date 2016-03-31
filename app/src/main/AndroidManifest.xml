@@ -40,6 +40,10 @@
             android:name=".ui.activity.TopicDetailActivity"
             android:theme="@style/AppTheme.Detail" />
 
+        <activity
+            android:name=".ui.activity.NewTopicActivity"
+            android:theme="@style/AppTheme.Home" />
+
         <receiver android:name=".receiver.PushMessageReceiver">
             <intent-filter>
                 <action android:name="cn.bmob.push.action.MESSAGE" />

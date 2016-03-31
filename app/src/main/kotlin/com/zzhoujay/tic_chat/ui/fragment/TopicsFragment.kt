@@ -11,12 +11,14 @@ import cn.bmob.v3.listener.FindListener
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.common.Configuration
 import com.zzhoujay.tic_chat.data.Topic
+import com.zzhoujay.tic_chat.ui.activity.NewTopicActivity
 import com.zzhoujay.tic_chat.ui.activity.TopicDetailActivity
 import com.zzhoujay.tic_chat.ui.adapter.SpinnerAdapter
 import com.zzhoujay.tic_chat.ui.adapter.TopicAdapter
 import com.zzhoujay.tic_chat.ui.adapter.holder.LoadMoreHolder
 import com.zzhoujay.tic_chat.util.loading
-import kotlinx.android.synthetic.main.layout_recycler_view.*
+import kotlinx.android.synthetic.main.fragment_topics.*
+import org.jetbrains.anko.onClick
 import org.jetbrains.anko.startActivity
 
 /**
@@ -45,7 +47,7 @@ class TopicsFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(R.layout.layout_recycler_view, container, false)
+        return inflater?.inflate(R.layout.fragment_topics, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -55,6 +57,8 @@ class TopicsFragment : BaseFragment() {
         recyclerView.adapter = spinnerAdapter
 
         recyclerView.post({ refresh() })
+
+        new_topic.onClick { context.startActivity<NewTopicActivity>() }
 
         swipeRefreshLayout.setOnRefreshListener {
             refresh()

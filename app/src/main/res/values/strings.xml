@@ -42,6 +42,9 @@
     <string name="test_message">xxx在yyy主题回复了你</string>
     <string name="test_name">xxx</string>
     <string name="hint_reply">输入回复内容</string>
+    <string name="hint_new_title">请输入标题</string>
+    <string name="hint_new_content">请输入主题内容，不少于20字</string>
+    <string name="hint_new_category">请选择主题分类</string>
 
     <string-array name="topic_type">
         <item>Android</item>

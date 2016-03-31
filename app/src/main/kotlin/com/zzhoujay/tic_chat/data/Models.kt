@@ -22,10 +22,8 @@ class Profile(var name: String = "", var qq: String = "", var avatar: BmobFile) 
     }
 }
 
-class Category(var name: String = "") : BmobObject() {
-    override fun toString(): String {
-        return "Category(name='$name')"
-    }
+class Category(var name: String = "", var index: Int?) : BmobObject() {
+    override fun toString(): String = name
 }
 
 class Topic(var title: String = "", var content: String = "", var reply: Int = 0, var author: User, var category: Category) : BmobObject() {

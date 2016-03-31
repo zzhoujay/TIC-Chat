@@ -7,17 +7,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import cn.bmob.v3.BmobQuery
+import cn.bmob.v3.BmobUser
 import cn.bmob.v3.datatype.BmobPointer
 import cn.bmob.v3.listener.FindListener
+import cn.bmob.v3.listener.SaveListener
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.common.Configuration
 import com.zzhoujay.tic_chat.data.Reply
 import com.zzhoujay.tic_chat.data.Topic
+import com.zzhoujay.tic_chat.data.User
 import com.zzhoujay.tic_chat.ui.adapter.ReplyAdapter
 import com.zzhoujay.tic_chat.ui.adapter.TopicDetailAdapter
 import com.zzhoujay.tic_chat.ui.adapter.holder.LoadMoreHolder
 import com.zzhoujay.tic_chat.util.loading
+import com.zzhoujay.tic_chat.util.progress
+import com.zzhoujay.tic_chat.util.toast
 import kotlinx.android.synthetic.main.fragment_topic_detail.*
+import org.jetbrains.anko.onClick
 
 /**
  * Created by zhou on 16-3-26.
@@ -48,6 +54,23 @@ class TopicDetailFragment : BaseFragment() {
 
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = topicDetailAdapter
+
+        sendReply.onClick {
+            progress(false, getString(R.string.alert_send_reply)) {
+                val reply = Reply(replyContent.text.toString(), null, BmobUser.getCurrentUser(context, User::class.java), topicDetailAdapter.topic!!)
+                reply.save(context, object : SaveListener() {
+                    override fun onSuccess() {
+                        dismiss()
+                        toast(R.string.toast_reply_success)
+                    }
+
+                    override fun onFailure(p0: Int, p1: String?) {
+                        dismiss()
+                        Log.i("onError", "code:$p0,msg:$p1")
+                    }
+                })
+            }
+        }
 
         swipeRefreshLayout.setOnRefreshListener { refresh() }
 

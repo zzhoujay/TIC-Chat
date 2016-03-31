@@ -14,7 +14,11 @@ object Configuration {
 
     object Const {
 
+        const val titleMinLen = 5
+        const val titleMaxLen = 40
 
+        const val contentMinLen = 20
+        const val contentMaxLen = 1000
     }
 
     object Page {

@@ -56,7 +56,6 @@ class TopicsFragment : BaseFragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = spinnerAdapter
 
-        recyclerView.post({ refresh() })
 
         new_topic.onClick { context.startActivity<NewTopicActivity>() }
 
@@ -64,6 +63,7 @@ class TopicsFragment : BaseFragment() {
             refresh()
         }
 
+        recyclerView.post({ refresh() })
     }
 
     fun refresh() {

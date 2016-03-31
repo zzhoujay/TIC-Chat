@@ -30,6 +30,7 @@
         android:orientation="horizontal">
 
         <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/replyContent"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -38,6 +39,7 @@
             android:paddingRight="5dp" />
 
         <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/sendReply"
             style="@style/ClickableButton"
             android:layout_width="@dimen/reply_edit_height"
             android:layout_height="@dimen/reply_edit_height"

@@ -82,4 +82,8 @@
         <item name="android:background">@color/material_grey_400</item>
     </style>
 
+    <style name="ClickableButton">
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
 </resources>

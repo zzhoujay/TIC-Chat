@@ -16,7 +16,7 @@ import kotlin.reflect.KProperty
 /**
  * Created by zhou on 16-3-26.
  */
-class ReplyAdapter() : NormalAdapter() {
+class ReplyAdapter() : NormalAdapter(), DataList<Reply> {
 
     private val replys: MutableList<Reply> by lazy { ArrayList<Reply>() }
 
@@ -37,8 +37,8 @@ class ReplyAdapter() : NormalAdapter() {
         }
     }
 
-    fun addReply(rs: List<Reply>?) {
-        val r = replys.merge(rs)
+    override fun add(t: List<Reply>?) {
+        val r = replys.merge(t)
         if (r != null && r.size > 0) {
             val s = itemCount
             replys.addAll(r)
@@ -46,10 +46,10 @@ class ReplyAdapter() : NormalAdapter() {
         }
     }
 
-    fun resetReply(rs: List<Reply>?) {
+    override fun reset(t: List<Reply>?) {
         replys.clear()
-        if (rs != null) {
-            replys.addAll(rs)
+        if (t != null) {
+            replys.addAll(t)
         }
         notifyDataSetChanged()
     }

@@ -8,4 +8,6 @@
     <dimen name="font_small">13sp</dimen>
     <dimen name="font_mid">18sp</dimen>
 
+    <dimen name="reply_edit_height">48dp</dimen>
+
 </resources>

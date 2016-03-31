@@ -41,6 +41,7 @@
     <string name="test_time">两天前</string>
     <string name="test_message">xxx在yyy主题回复了你</string>
     <string name="test_name">xxx</string>
+    <string name="hint_reply">输入回复内容</string>
 
     <string-array name="topic_type">
         <item>Android</item>

@@ -39,6 +39,7 @@ class TopicDetailAdapter : LoadMoreAdapter {
     override fun headerCount(): Int = 1
 
     override fun onFooterBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
+        super.onFooterBindViewHolder(holder, position)
     }
 
     override fun onHeaderCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {

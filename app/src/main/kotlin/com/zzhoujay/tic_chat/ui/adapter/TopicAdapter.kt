@@ -7,13 +7,14 @@ import com.bumptech.glide.Glide
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.data.Topic
 import com.zzhoujay.tic_chat.ui.adapter.holder.TopicHolder
+import com.zzhoujay.tic_chat.util.DataList
 import com.zzhoujay.tic_chat.util.merge
 import java.util.*
 
 /**
  * Created by zhou on 16-3-26.
  */
-class TopicAdapter() : NormalAdapter() {
+class TopicAdapter() : NormalAdapter(), DataList<Topic> {
 
 
     private val topics: MutableList<Topic> by lazy { ArrayList<Topic>() }
@@ -47,8 +48,8 @@ class TopicAdapter() : NormalAdapter() {
         }
     }
 
-    fun addTopic(ts: List<Topic>?) {
-        val t = topics.merge(ts)
+    override fun add(t: List<Topic>?) {
+        val t = topics.merge(t)
         if (t != null && t.size > 0) {
             val s = itemCount
             topics.addAll(t)
@@ -56,10 +57,10 @@ class TopicAdapter() : NormalAdapter() {
         }
     }
 
-    fun resetTopic(ts: List<Topic>?) {
+    override fun reset(t: List<Topic>?) {
         topics.clear()
-        if (ts != null)
-            topics.addAll(ts)
+        if (t != null)
+            topics.addAll(t)
         notifyDataSetChanged()
     }
 

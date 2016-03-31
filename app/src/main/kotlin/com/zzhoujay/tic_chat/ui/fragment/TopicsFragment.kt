@@ -16,7 +16,6 @@ import com.zzhoujay.tic_chat.ui.adapter.SpinnerAdapter
 import com.zzhoujay.tic_chat.ui.adapter.TopicAdapter
 import com.zzhoujay.tic_chat.ui.adapter.holder.LoadMoreHolder
 import com.zzhoujay.tic_chat.util.loading
-import com.zzhoujay.tic_chat.util.toast
 import kotlinx.android.synthetic.main.layout_recycler_view.*
 import org.jetbrains.anko.startActivity
 
@@ -55,9 +54,7 @@ class TopicsFragment : BaseFragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = spinnerAdapter
 
-        recyclerView.post({
-            refresh()
-        })
+        recyclerView.post({ refresh() })
 
         swipeRefreshLayout.setOnRefreshListener {
             refresh()
@@ -69,19 +66,22 @@ class TopicsFragment : BaseFragment() {
         loading(swipeRefreshLayout) {
             val query = BmobQuery<Topic>()
             spinnerAdapter.resetState()
-            query.setLimit(Configuration.Page.default_size)
+            val size=Configuration.Page.default_size
+            query.setLimit(size)
             query.order("-updatedAt")
             query.include("author.profile")
             query.findObjects(context, object : FindListener<Topic>() {
                 override fun onError(code: Int, msg: String?) {
-                    Log.i("onError", "code:$code,msg:$msg")
                     isRefreshing = false
+                    Log.i("onError", "code:$code,msg:$msg")
                 }
 
                 override fun onSuccess(ts: MutableList<Topic>?) {
-                    Log.i("onSuccess", "ts:$ts")
-                    topicAdapter.resetTopic(ts)
                     isRefreshing = false
+                    Log.i("onSuccess", "ts:$ts")
+                    val nomoreData = ts?.size ?: 0 < size
+                    topicAdapter.reset(ts)
+                    spinnerAdapter.state = if (nomoreData) LoadMoreHolder.State.nomore else LoadMoreHolder.State.ready
                 }
             })
         }
@@ -103,7 +103,7 @@ class TopicsFragment : BaseFragment() {
             override fun onSuccess(p0: MutableList<Topic>?) {
                 Log.i("onSuccess", "ts:$p0")
                 val nomoreData = p0?.size ?: 0 < size
-                topicAdapter.addTopic(p0)
+                topicAdapter.add(p0)
                 spinnerAdapter.state = if (nomoreData) LoadMoreHolder.State.nomore else LoadMoreHolder.State.ready
             }
         })

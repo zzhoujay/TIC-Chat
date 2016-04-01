@@ -11,11 +11,11 @@ import cn.bmob.v3.datatype.BmobPointer
 import cn.bmob.v3.listener.SaveListener
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.common.Configuration
+import com.zzhoujay.tic_chat.data.Profile
 import com.zzhoujay.tic_chat.data.User
+import com.zzhoujay.tic_chat.ui.activity.HomeActivity
 import com.zzhoujay.tic_chat.ui.activity.ToolBarActivity
-import com.zzhoujay.tic_chat.util.SimpleTextWatcher
-import com.zzhoujay.tic_chat.util.progress
-import com.zzhoujay.tic_chat.util.toast
+import com.zzhoujay.tic_chat.util.*
 import kotlinx.android.synthetic.main.fragment_register.*
 import org.jetbrains.anko.enabled
 import org.jetbrains.anko.onClick
@@ -105,26 +105,26 @@ class RegisterFragment : BaseFragment() {
 
         registerAction.onClick {
 
-            progress(false, "注册中。。。") {
+            progress(false,getString(R.string.alert_register)) {
 
                 val ac = account.editText!!.text.toString()
                 val pd = password.editText!!.text.toString()
+                val em = email.editText!!.text.toString()
 
-                val user = User(null)
+                val user = User(Profile())
                 user.username = ac
                 user.setPassword(pd)
+                user.email = em
 
-                user.signUp(context, object : SaveListener() {
-                    override fun onSuccess() {
-                        toast("success")
-                        dismiss()
+                user.signUp(context, SimpleSaveListener({ code, msg ->
+                    dismiss()
+                    if (code == 0) {
+                        toast(R.string.toast_register_success)
+                        startActivity<HomeActivity>()
+                    } else {
+                        toast("code:$code,msg:$msg")
                     }
-
-                    override fun onFailure(p0: Int, p1: String?) {
-                        toast("code:$p0,msg:$p1")
-                        dismiss()
-                    }
-                })
+                }))
             }
 
         }

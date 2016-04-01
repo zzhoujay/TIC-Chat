@@ -82,7 +82,6 @@ class TopicsFragment : BaseFragment() {
 
                 override fun onSuccess(ts: MutableList<Topic>?) {
                     isRefreshing = false
-                    Log.i("onSuccess", "ts:$ts")
                     val nomoreData = ts?.size ?: 0 < size
                     topicAdapter.reset(ts)
                     spinnerAdapter.state = if (nomoreData) LoadMoreHolder.State.nomore else LoadMoreHolder.State.ready

@@ -2,6 +2,7 @@ package com.zzhoujay.tic_chat.ui.activity
 
 import android.os.Bundle
 import com.zzhoujay.tic_chat.ui.fragment.NewTopicFragment
+import com.zzhoujay.tic_chat.util.checkLogin
 
 /**
  * Created by zhou on 16-3-31.
@@ -9,6 +10,7 @@ import com.zzhoujay.tic_chat.ui.fragment.NewTopicFragment
 class NewTopicActivity : ToolBarActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        checkLogin()
         super.onCreate(savedInstanceState)
         quickFinish = true
         currFragment = NewTopicFragment()

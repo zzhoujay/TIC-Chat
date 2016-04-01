@@ -51,10 +51,14 @@
     <string name="alert_post_topic">正在发表主题</string>
     <string name="alert_load_info">正在加载一些信息</string>
     <string name="alert_send_reply">回复正在发送中</string>
+    <string name="alert_please_wait">请稍后</string>
+    <string name="alert_login">正在登陆中…</string>
+    <string name="alert_register">正在注册中…</string>
 
     <string name="toast_post_topic_success">发表主题成功</string>
     <string name="toast_post_topic_error">发表主题失败</string>
     <string name="toast_reply_success">回复主题成功</string>
+    <string name="toast_register_success">注册成功</string>
 
     <string-array name="topic_type">
         <item>Android</item>

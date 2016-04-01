@@ -1,6 +1,7 @@
 package com.zzhoujay.tic_chat.util
 
 import android.animation.Animator
+import android.app.Activity
 import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
@@ -15,6 +16,11 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
+import cn.bmob.v3.BmobUser
+import com.zzhoujay.tic_chat.data.User
+import com.zzhoujay.tic_chat.ui.activity.LoginActivity
+import org.jetbrains.anko.internals.AnkoInternals
+import org.jetbrains.anko.startActivity
 import java.io.Serializable
 
 /**
@@ -30,7 +36,7 @@ fun Fragment.toast(res: Int) {
     Toast.makeText(context, res, Toast.LENGTH_SHORT).show()
 }
 
-fun <T : Context> T.progress(cancelAble: Boolean, msg: CharSequence, t: Dialog.() -> Unit) {
+fun <T : Context> T.progress(cancelAble: Boolean, msg: CharSequence, t: ProgressDialog.() -> Unit) {
     val progressDialog = ProgressDialog(this)
     progressDialog.setMessage(msg)
     progressDialog.show()
@@ -38,7 +44,7 @@ fun <T : Context> T.progress(cancelAble: Boolean, msg: CharSequence, t: Dialog.(
     t.invoke(progressDialog)
 }
 
-fun Fragment.progress(cancelAble: Boolean, msg: CharSequence, t: Dialog.() -> Unit) {
+fun Fragment.progress(cancelAble: Boolean, msg: CharSequence, t: ProgressDialog.() -> Unit) {
     val progressDialog = ProgressDialog(context)
     progressDialog.setMessage(msg)
     progressDialog.show()
@@ -57,6 +63,26 @@ fun Fragment.withArguments(vararg args: Pair<String, Serializable>) {
         bundle.putSerializable(p.first, p.second)
     }
     arguments = bundle
+}
+
+fun Fragment.checkLogin() {
+    val user = BmobUser.getCurrentUser(context, User::class.java)
+    if (user == null) {
+        context.startActivity<LoginActivity>(LoginActivity.flag_login to true)
+        activity.finish()
+    }
+}
+
+fun Activity.checkLogin() {
+    val user = BmobUser.getCurrentUser(this, User::class.java)
+    if (user == null) {
+        startActivity<LoginActivity>(LoginActivity.flag_login to true)
+        finish()
+    }
+}
+
+inline fun <reified T : Activity> Fragment.startActivity(vararg params: Pair<String, Any>) {
+    AnkoInternals.internalStartActivity(context, T::class.java, params)
 }
 
 interface DataList<T> {

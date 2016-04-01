@@ -5,6 +5,7 @@ import com.jude.swipbackhelper.SwipeBackHelper
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.data.Topic
 import com.zzhoujay.tic_chat.ui.fragment.TopicDetailFragment
+import com.zzhoujay.tic_chat.util.checkLogin
 import com.zzhoujay.tic_chat.util.withArguments
 
 /**
@@ -13,6 +14,7 @@ import com.zzhoujay.tic_chat.util.withArguments
 class TopicDetailActivity : ToolBarActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        checkLogin()
         super.onCreate(savedInstanceState)
         SwipeBackHelper.onCreate(this)
         quickFinish = true

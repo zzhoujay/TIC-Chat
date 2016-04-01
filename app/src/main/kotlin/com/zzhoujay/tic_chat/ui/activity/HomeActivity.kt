@@ -10,6 +10,7 @@ import com.zzhoujay.tic_chat.ui.fragment.BaseFragment
 import com.zzhoujay.tic_chat.ui.fragment.MessageFragment
 import com.zzhoujay.tic_chat.ui.fragment.ProfileFragment
 import com.zzhoujay.tic_chat.ui.fragment.TopicsFragment
+import com.zzhoujay.tic_chat.util.checkLogin
 import kotlinx.android.synthetic.main.activity_home.*
 
 /**
@@ -21,6 +22,9 @@ class HomeActivity : BaseActivity() {
     val tabTitles: Array<String> by lazy { resources.getStringArray(R.array.home_tabs) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        checkLogin()
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 

@@ -13,10 +13,9 @@ import com.zzhoujay.tic_chat.App
 
 class User(var profile: Profile?) : BmobUser() {
 
-
 }
 
-class Profile(var name: String = "", var qq: String = "", var avatar: BmobFile) : BmobObject() {
+class Profile(var name: String = "", var qq: String = "", var avatar: BmobFile? = null) : BmobObject() {
     override fun toString(): String {
         return "Profile(name='$name', qq='$qq')"
     }

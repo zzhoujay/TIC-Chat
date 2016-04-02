@@ -77,6 +77,10 @@ class TopicDetailFragment : BaseFragment() {
         recyclerView.post({ refresh() })
     }
 
+    fun sendReply(){
+
+    }
+
     fun refresh() {
         loading(swipeRefreshLayout) {
             val query = BmobQuery<Reply>()

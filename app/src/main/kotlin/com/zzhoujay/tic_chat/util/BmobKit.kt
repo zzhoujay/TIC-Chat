@@ -1,5 +1,6 @@
 package com.zzhoujay.tic_chat.util
 
+import android.util.Log
 import cn.bmob.v3.listener.FindListener
 import cn.bmob.v3.listener.SaveListener
 import cn.bmob.v3.listener.UpdateListener
@@ -38,9 +39,12 @@ open class SimpleUpdateListener(val t: (code: Int, msg: String?) -> Unit) : Upda
 
 open class SimpleFindListener<T>(val t: (code: Int, msg: String?, list: List<T>?) -> Unit) : FindListener<T>() {
     override fun onSuccess(p0: List<T>?) {
+        Log.i("sl", "su:$p0")
         t.invoke(0, null, p0)
     }
+
     override fun onError(p0: Int, p1: String?) {
+        Log.i("sl", "er:code:$p0,msg:$p1")
         t.invoke(p0, p1, null)
     }
 }

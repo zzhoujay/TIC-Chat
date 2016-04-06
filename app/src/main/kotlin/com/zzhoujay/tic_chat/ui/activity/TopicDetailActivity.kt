@@ -15,8 +15,8 @@ class TopicDetailActivity : ToolBarActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         checkLogin()
+        swipeBack = true
         super.onCreate(savedInstanceState)
-        SwipeBackHelper.onCreate(this)
         quickFinish = true
 
         setTitle(R.string.title_detail)
@@ -31,13 +31,4 @@ class TopicDetailActivity : ToolBarActivity() {
         currFragment = f
     }
 
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-        SwipeBackHelper.onPostCreate(this)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        SwipeBackHelper.onDestroy(this)
-    }
 }

@@ -35,4 +35,9 @@
     <style name="ClickableButton">
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
     </style>
+
+    <style name="AccentButton">
+        <item name="android:textColor">@color/material_white</item>
+        <item name="android:backgroundTint">@color/colorAccent</item>
+    </style>
 </resources>

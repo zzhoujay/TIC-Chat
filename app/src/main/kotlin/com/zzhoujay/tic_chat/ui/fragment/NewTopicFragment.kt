@@ -4,13 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.SpinnerAdapter
 import cn.bmob.v3.BmobQuery
 import cn.bmob.v3.BmobUser
 import cn.bmob.v3.listener.FindListener
-import cn.bmob.v3.listener.SaveListener
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.common.Configuration
 import com.zzhoujay.tic_chat.data.Category
@@ -18,9 +15,7 @@ import com.zzhoujay.tic_chat.data.Topic
 import com.zzhoujay.tic_chat.data.User
 import com.zzhoujay.tic_chat.util.*
 import kotlinx.android.synthetic.main.fragment_new_topic.*
-import kotlinx.android.synthetic.main.item_spinner.*
 import org.jetbrains.anko.onClick
-import org.jetbrains.anko.onItemSelectedListener
 
 /**
  * Created by zhou on 16-3-31.
@@ -51,7 +46,7 @@ class NewTopicFragment : BaseFragment() {
             field = value
         }
 
-    val categoryAdapter: ArrayAdapter<Category> by lazy { ArrayAdapter<Category>(context, android.R.layout.simple_spinner_dropdown_item, emptyArray()) }
+    val categoryAdapter: ArrayAdapter<Category> by lazy { ArrayAdapter<Category>(context, android.R.layout.simple_spinner_dropdown_item) }
 
     var selectedCategory: Category? = null
 
@@ -86,18 +81,15 @@ class NewTopicFragment : BaseFragment() {
 
                 val topic = Topic(title, content, 0, BmobUser.getCurrentUser(context, User::class.java), selectedCategory!!)
 
-                topic.save(context, object : SaveListener() {
-                    override fun onSuccess() {
-                        dismiss()
+                topic.save(context, SimpleSaveListener({ code, msg ->
+                    dismiss()
+                    if (code != 0) {
+                        toast("" + msg)
+                    } else {
                         toast(R.string.toast_post_topic_success)
+                        finish()
                     }
-
-                    override fun onFailure(p0: Int, p1: String?) {
-                        dismiss()
-                        toast("code:$p0,msg:$p1")
-                    }
-                })
-
+                }))
 
             }
         }
@@ -125,7 +117,6 @@ class NewTopicFragment : BaseFragment() {
                     dismiss()
                     selectedCategory = p0?.get(0)
                     categoryAdapter.addAll(p0)
-                    categoryAdapter.notifyDataSetChanged()
                 }
             })
         }

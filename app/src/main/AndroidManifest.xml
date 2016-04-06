@@ -42,7 +42,7 @@
 
         <activity
             android:name=".ui.activity.NewTopicActivity"
-            android:theme="@style/AppTheme.Home" />
+            android:theme="@style/AppTheme.NewTopic" />
 
         <receiver android:name=".receiver.PushMessageReceiver">
             <intent-filter>

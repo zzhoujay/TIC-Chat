@@ -12,6 +12,12 @@
         <item name="android:windowTranslucentStatus" tools:ignore="NewApi">true</item>
     </style>
 
+    <style name="AppTheme.SwipeBack" parent="AppTheme.Home">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
+    </style>
+
     <style name="AppTheme.Login">
         <item name="colorPrimary">@color/colorPrimaryLogin</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkLogin</item>
@@ -28,11 +34,9 @@
 
     </style>
 
-    <style name="AppTheme.Detail" parent="AppTheme.Home">
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
-        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
-    </style>
+    <style name="AppTheme.Detail" parent="AppTheme.SwipeBack" />
+
+    <style name="AppTheme.NewTopic" parent="AppTheme.SwipeBack" />
 
     <style name="InputLayout">
         <item name="android:layout_width">match_parent</item>
@@ -84,6 +88,11 @@
 
     <style name="ClickableButton">
         <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="AccentButton">
+        <item name="android:textColor">@color/material_white</item>
+        <item name="android:background">@drawable/support_accent_button</item>
     </style>
 
 </resources>

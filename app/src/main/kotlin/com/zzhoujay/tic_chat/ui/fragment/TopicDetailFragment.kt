@@ -1,6 +1,8 @@
 package com.zzhoujay.tic_chat.ui.fragment
 
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,6 +21,8 @@ import com.zzhoujay.tic_chat.data.User
 import com.zzhoujay.tic_chat.ui.adapter.ReplyAdapter
 import com.zzhoujay.tic_chat.ui.adapter.TopicDetailAdapter
 import com.zzhoujay.tic_chat.ui.adapter.holder.LoadMoreHolder
+import com.zzhoujay.tic_chat.ui.weiget.ReplyAt
+import com.zzhoujay.tic_chat.util.TextKit
 import com.zzhoujay.tic_chat.util.loading
 import com.zzhoujay.tic_chat.util.progress
 import com.zzhoujay.tic_chat.util.toast
@@ -33,6 +37,10 @@ class TopicDetailFragment : BaseFragment() {
     val replyAdapter: ReplyAdapter by lazy {
         val r = ReplyAdapter()
         r.realPosition = { it - topicDetailAdapter.headerCount() }
+        r.onItemLongClickListener = {
+            val replyAt = ReplyAt(it)
+            replyContent.text.append(" ").append(replyAt).append(" ")
+        }
         r
     }
     val topicDetailAdapter: TopicDetailAdapter by lazy {
@@ -55,30 +63,28 @@ class TopicDetailFragment : BaseFragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = topicDetailAdapter
 
-        sendReply.onClick {
-            progress(false, getString(R.string.alert_send_reply)) {
-                val reply = Reply(replyContent.text.toString(), null, BmobUser.getCurrentUser(context, User::class.java), topicDetailAdapter.topic!!)
-                reply.save(context, object : SaveListener() {
-                    override fun onSuccess() {
-                        dismiss()
-                        toast(R.string.toast_reply_success)
-                    }
-
-                    override fun onFailure(p0: Int, p1: String?) {
-                        dismiss()
-                        Log.i("onError", "code:$p0,msg:$p1")
-                    }
-                })
-            }
-        }
+        sendReply.onClick { sendReply() }
 
         swipeRefreshLayout.setOnRefreshListener { refresh() }
 
         recyclerView.post({ refresh() })
     }
 
-    fun sendReply(){
+    fun sendReply() {
+        progress(false, getString(R.string.alert_send_reply)) {
+            val reply = Reply(replyContent.text.toString(), null, BmobUser.getCurrentUser(context, User::class.java), topicDetailAdapter.topic!!)
+            reply.save(context, object : SaveListener() {
+                override fun onSuccess() {
+                    dismiss()
+                    toast(R.string.toast_reply_success)
+                }
 
+                override fun onFailure(p0: Int, p1: String?) {
+                    dismiss()
+                    Log.i("onError", "code:$p0,msg:$p1")
+                }
+            })
+        }
     }
 
     fun refresh() {

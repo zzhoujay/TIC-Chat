@@ -11,6 +11,7 @@ class NewTopicActivity : ToolBarActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         checkLogin()
+        swipeBack = true
         super.onCreate(savedInstanceState)
         quickFinish = true
         currFragment = NewTopicFragment()

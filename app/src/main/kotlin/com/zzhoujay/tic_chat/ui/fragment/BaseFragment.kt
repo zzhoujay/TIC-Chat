@@ -30,4 +30,8 @@ open class BaseFragment : Fragment() {
     fun setTitle(res: Int) {
         activity?.setTitle(res)
     }
+
+    fun finish() {
+        activity?.finish()
+    }
 }

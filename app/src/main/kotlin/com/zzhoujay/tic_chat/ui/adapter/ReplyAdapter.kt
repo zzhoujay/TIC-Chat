@@ -18,12 +18,20 @@ import kotlin.reflect.KProperty
  */
 class ReplyAdapter() : NormalAdapter(), DataList<Reply> {
 
+    var onItemLongClickListener: ((Reply) -> Unit)? = null
+
     private val replys: MutableList<Reply> by lazy { ArrayList<Reply>() }
+
+    private val onLongClick: ((Int) -> Unit) = {
+        val p = realPosition(it)
+        onItemLongClickListener?.invoke(replys[p])
+    }
 
     override fun getItemCount(): Int = replys.size
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
         val holder = ReplyHolder(LayoutInflater.from(parent!!.context).inflate(R.layout.item_reply, parent, false))
+        holder.onLongClick = onLongClick
         return holder
     }
 

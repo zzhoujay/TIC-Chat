@@ -46,7 +46,7 @@
     <string name="hint_reply">输入回复内容</string>
     <string name="hint_new_title">请输入标题</string>
     <string name="hint_new_content">请输入主题内容，不少于20字</string>
-    <string name="hint_new_category">请选择主题分类</string>
+    <string name="hint_new_category">请选择主题分类：</string>
 
     <string name="alert_post_topic">正在发表主题</string>
     <string name="alert_load_info">正在加载一些信息</string>
@@ -59,6 +59,7 @@
     <string name="toast_post_topic_error">发表主题失败</string>
     <string name="toast_reply_success">回复主题成功</string>
     <string name="toast_register_success">注册成功</string>
+    <string name="text_post_topic_action">发布主题</string>
 
     <string-array name="topic_type">
         <item>Android</item>

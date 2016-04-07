@@ -6,12 +6,10 @@ import cn.bmob.v3.BmobPushManager
 import cn.bmob.v3.listener.FindListener
 import cn.bmob.v3.listener.SaveListener
 import cn.bmob.v3.listener.UpdateListener
-import com.alibaba.fastjson.JSON
 import com.zzhoujay.tic_chat.App
 import com.zzhoujay.tic_chat.data.Installation
 import com.zzhoujay.tic_chat.data.Message
 import com.zzhoujay.tic_chat.data.User
-import org.json.JSONObject
 
 /**
  * Created by zhou on 16-3-29.
@@ -64,6 +62,6 @@ object BmobKit {
         query.addWhereEqualTo("user", user)
         val push = BmobPushManager<Installation>(App.app)
         push.query = query
-        push.pushMessage(JSON.toJSONString(msg))
+        push.pushMessage(App.gson.toJson(msg))
     }
 }

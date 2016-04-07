@@ -6,6 +6,8 @@ import cn.bmob.push.BmobPush
 import cn.bmob.v3.Bmob
 import cn.bmob.v3.BmobInstallation
 import cn.bmob.v3.BmobPushManager
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -25,6 +27,7 @@ class App : Application() {
     companion object {
         var app: App by Delegates.notNull<App>()
         val push: BmobPushManager<Installation> by lazy { BmobPushManager<Installation>(app) }
+        val gson: Gson by lazy { Gson() }
     }
 
     override fun onCreate() {

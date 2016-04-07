@@ -4,7 +4,6 @@ import cn.bmob.v3.BmobInstallation
 import cn.bmob.v3.BmobObject
 import cn.bmob.v3.BmobUser
 import cn.bmob.v3.datatype.BmobFile
-import cn.bmob.v3.datatype.BmobPointer
 import com.zzhoujay.tic_chat.App
 
 /**
@@ -52,4 +51,19 @@ class Installation(var user: User?) : BmobInstallation(App.app) {
     }
 }
 
-class Message(var fromUser: User, var targetUser: User, var targetTopic: Topic, targetReply: Reply) : BmobObject()
+class Message(var fromUser: User, var targetUser: User, var targetTopic: Topic, var targetReply: Reply) : BmobObject() {
+    override fun toString(): String {
+        return "Message(fromUser=$fromUser, targetUser=$targetUser, targetTopic=$targetTopic, targetReply=$targetReply)"
+    }
+}
+
+data class Alert<T>(val alert: T, val type: Int) {
+    override fun toString(): String {
+        return "Alert(alert=$alert,type:$type)"
+    }
+
+    companion object {
+        const val type_message = 1
+        const val type_notification = 2
+    }
+}

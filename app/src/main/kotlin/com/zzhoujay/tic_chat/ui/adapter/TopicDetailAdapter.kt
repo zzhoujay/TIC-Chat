@@ -7,13 +7,14 @@ import com.bumptech.glide.Glide
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.data.Topic
 import com.zzhoujay.tic_chat.ui.adapter.holder.TopicDetailHolder
+import kotlin.properties.Delegates
 
 /**
  * Created by zhou on 16-3-26.
  */
 class TopicDetailAdapter : LoadMoreAdapter {
 
-    var topic: Topic? = null
+    var topic: Topic ? = null
         set(value) {
             field = value
             notifyItemChanged(0)

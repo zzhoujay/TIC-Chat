@@ -5,6 +5,7 @@ import android.app.Application
 import cn.bmob.push.BmobPush
 import cn.bmob.v3.Bmob
 import cn.bmob.v3.BmobInstallation
+import cn.bmob.v3.BmobPushManager
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -12,6 +13,7 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
 import com.zzhoujay.tic_chat.common.ApiKey
+import com.zzhoujay.tic_chat.data.Installation
 import org.jetbrains.anko.toast
 import kotlin.properties.Delegates
 
@@ -22,6 +24,7 @@ class App : Application() {
 
     companion object {
         var app: App by Delegates.notNull<App>()
+        val push: BmobPushManager<Installation> by lazy { BmobPushManager<Installation>(app) }
     }
 
     override fun onCreate() {

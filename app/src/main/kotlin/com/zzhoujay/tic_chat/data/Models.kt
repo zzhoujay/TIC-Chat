@@ -51,3 +51,5 @@ class Installation(var user: User?) : BmobInstallation(App.app) {
         return "Installation(user=$user)"
     }
 }
+
+class Message(var fromUser: User, var targetUser: User, var targetTopic: Topic, targetReply: Reply) : BmobObject()

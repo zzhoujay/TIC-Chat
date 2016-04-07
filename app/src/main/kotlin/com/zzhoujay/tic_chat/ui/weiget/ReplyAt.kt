@@ -16,7 +16,7 @@ class ReplyAt(val reply: Reply) : CharSequence {
     val value: CharSequence
 
     init {
-        value = TextKit.generateColorText("@${reply.author.profile?.name}", ContextCompat.getColor(App.app, R.color.material_lightBlue_500))
+        value = TextKit.generateColorTextReply("@${reply.author.profile?.name}", ContextCompat.getColor(App.app, R.color.material_lightBlue_500))
         length = value.length
     }
 

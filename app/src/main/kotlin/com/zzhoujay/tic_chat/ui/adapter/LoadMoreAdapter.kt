@@ -41,7 +41,6 @@ abstract class LoadMoreAdapter : AdvanceAdapter {
         if (holder is LoadMoreHolder) {
             holder.state = state
         }
-        Log.i("onFooterBindViewHolder", "holder:$holder,position:$position,status:$state")
     }
 
     fun resetState() {

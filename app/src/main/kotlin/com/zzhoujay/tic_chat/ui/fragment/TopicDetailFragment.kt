@@ -4,10 +4,14 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.LinearLayoutManager
+import android.text.SpannableStringBuilder
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import cn.bmob.v3.BmobQuery
 import cn.bmob.v3.BmobUser
 import cn.bmob.v3.datatype.BmobPointer
@@ -22,12 +26,11 @@ import com.zzhoujay.tic_chat.ui.adapter.ReplyAdapter
 import com.zzhoujay.tic_chat.ui.adapter.TopicDetailAdapter
 import com.zzhoujay.tic_chat.ui.adapter.holder.LoadMoreHolder
 import com.zzhoujay.tic_chat.ui.weiget.ReplyAt
-import com.zzhoujay.tic_chat.util.TextKit
-import com.zzhoujay.tic_chat.util.loading
-import com.zzhoujay.tic_chat.util.progress
-import com.zzhoujay.tic_chat.util.toast
+import com.zzhoujay.tic_chat.ui.weiget.ReplyAtSpan
+import com.zzhoujay.tic_chat.util.*
 import kotlinx.android.synthetic.main.fragment_topic_detail.*
 import org.jetbrains.anko.onClick
+import java.util.*
 
 /**
  * Created by zhou on 16-3-26.
@@ -60,6 +63,21 @@ class TopicDetailFragment : BaseFragment() {
             topicDetailAdapter.topic = arguments.getSerializable(Topic.TOPIC) as Topic
         }
 
+
+        replyContent.addTextChangedListener(object : SimpleTextWatcher() {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                if (after <= 0 && s is SpannableStringBuilder) {
+                    val ss = s.getSpans(0, start + count, ReplyAtSpan::class.java)
+                    if (ss != null && ss.size > 0) {
+                        Log.i("gg", "ss:$ss")
+                    }
+                }
+                Log.i("textChange", "s:$s,start:$start,count:$count,after:$after,type:${s?.javaClass?.name}")
+                Log.i("span", "replyAtSpan:${if (s is SpannableStringBuilder) Arrays.toString(s.getSpans(0, s.length, ReplyAtSpan::class.java)) else null}")
+            }
+        })
+
+
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = topicDetailAdapter
 
@@ -76,6 +94,7 @@ class TopicDetailFragment : BaseFragment() {
             reply.save(context, object : SaveListener() {
                 override fun onSuccess() {
                     dismiss()
+                    replyContent.text.clear()
                     toast(R.string.toast_reply_success)
                 }
 

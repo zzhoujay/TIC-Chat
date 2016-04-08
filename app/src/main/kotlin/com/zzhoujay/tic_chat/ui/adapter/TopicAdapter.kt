@@ -7,23 +7,17 @@ import com.bumptech.glide.Glide
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.data.Topic
 import com.zzhoujay.tic_chat.ui.adapter.holder.TopicHolder
-import com.zzhoujay.tic_chat.util.DataList
-import com.zzhoujay.tic_chat.util.merge
-import java.util.*
 
 /**
  * Created by zhou on 16-3-26.
  */
-class TopicAdapter() : NormalAdapter(), DataList<Topic> {
-
-
-    private val topics: MutableList<Topic> by lazy { ArrayList<Topic>() }
+class TopicAdapter() : NormalAdapter<Topic>() {
 
     var onTopicClickListener: ((Topic) -> Unit)? = null
 
     val onItemClickListener: ((position: Int) -> Unit) = {
         val rp = realPosition(it)
-        onTopicClickListener?.invoke(topics[rp])
+        onTopicClickListener?.invoke(list[rp])
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
@@ -32,13 +26,9 @@ class TopicAdapter() : NormalAdapter(), DataList<Topic> {
         return holder
     }
 
-    override fun getItemCount(): Int {
-        return topics.size
-    }
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
         if (holder is TopicHolder) {
-            val topic = topics[position]
+            val topic = list[position]
             holder.title.text = topic.title
             holder.content.text = topic.content
             holder.time.text = topic.updatedAt
@@ -46,22 +36,6 @@ class TopicAdapter() : NormalAdapter(), DataList<Topic> {
             holder.name.text = userProfile?.name
             Glide.with(holder.icon.context).load(userProfile?.avatar?.getFileUrl(holder.icon.context)).into(holder.icon)
         }
-    }
-
-    override fun add(t: List<Topic>?) {
-        val t = topics.merge(t)
-        if (t != null && t.size > 0) {
-            val s = itemCount
-            topics.addAll(t)
-            notifyItemRangeInserted(s, t.size)
-        }
-    }
-
-    override fun reset(t: List<Topic>?) {
-        topics.clear()
-        if (t != null)
-            topics.addAll(t)
-        notifyDataSetChanged()
     }
 
 }

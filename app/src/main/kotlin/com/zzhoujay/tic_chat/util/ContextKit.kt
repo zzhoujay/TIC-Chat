@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Toast
 import cn.bmob.v3.BmobUser
@@ -83,29 +84,6 @@ fun Activity.checkLogin() {
 
 inline fun <reified T : Activity> Fragment.startActivity(vararg params: Pair<String, Any>) {
     AnkoInternals.internalStartActivity(context, T::class.java, params)
-}
-
-interface DataList<T> {
-    fun add(t: List<T>?)
-    fun reset(t: List<T>?)
-}
-
-class DataListImpl<T>(val ts: MutableList<T>, val adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>) : DataList<T> {
-    override fun add(t: List<T>?) {
-        val r = ts.merge(t)
-        if (r != null && r.size > 0) {
-            val s = adapter.itemCount
-            ts.addAll(r)
-            adapter.notifyItemRangeInserted(s, adapter.itemCount)
-        }
-    }
-
-    override fun reset(t: List<T>?) {
-        ts.clear()
-        if (t != null)
-            ts.addAll(t)
-        adapter.notifyDataSetChanged()
-    }
 }
 
 open class SimpleTextWatcher : TextWatcher {

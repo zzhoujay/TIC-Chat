@@ -36,6 +36,7 @@ open class ToolBarActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (quickFinish && item?.itemId == android.R.id.home) {
+            setResult(RESULT_CANCELED)
             finish()
         }
         return super.onOptionsItemSelected(item)

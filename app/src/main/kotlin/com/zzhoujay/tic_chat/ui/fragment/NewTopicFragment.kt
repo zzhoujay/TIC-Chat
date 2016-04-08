@@ -1,5 +1,6 @@
 package com.zzhoujay.tic_chat.ui.fragment
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -87,6 +88,7 @@ class NewTopicFragment : BaseFragment() {
                         toast("" + msg)
                     } else {
                         toast(R.string.toast_post_topic_success)
+                        activity.setResult(Activity.RESULT_OK)
                         finish()
                     }
                 }))

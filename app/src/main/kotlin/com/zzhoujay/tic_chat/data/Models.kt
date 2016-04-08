@@ -5,6 +5,7 @@ import cn.bmob.v3.BmobObject
 import cn.bmob.v3.BmobUser
 import cn.bmob.v3.datatype.BmobFile
 import com.zzhoujay.tic_chat.App
+import org.json.JSONObject
 
 /**
  * Created by zhou on 16-3-24.
@@ -51,19 +52,36 @@ class Installation(var user: User?) : BmobInstallation(App.app) {
     }
 }
 
-class Message(var fromUser: User, var targetUser: User, var targetTopic: Topic, var targetReply: Reply) : BmobObject() {
+class Message(val type: Int, var fromUser: User, var targetUser: User, var targetTopic: Topic, var targetReply: Reply) : BmobObject() {
     override fun toString(): String {
-        return "Message(fromUser=$fromUser, targetUser=$targetUser, targetTopic=$targetTopic, targetReply=$targetReply)"
+        return "Message(type:$type,fromUser=$fromUser, targetUser=$targetUser, targetTopic=$targetTopic, targetReply=$targetReply)"
+    }
+
+    companion object {
+        const val type_reply_topic = 0x1234
+        const val type_quote_reply = 0x2345
     }
 }
 
-data class Alert<T>(val alert: T, val type: Int) {
+data class Alert(val type: Int, val id: String) {
+
     override fun toString(): String {
-        return "Alert(alert=$alert,type:$type)"
+        return "Alert(type:$type,id:$id)"
+    }
+
+    fun toJson(): JSONObject {
+        val json = JSONObject()
+        json.put("type", type).put("id", id)
+        return json
     }
 
     companion object {
         const val type_message = 1
         const val type_notification = 2
+
+        fun fromJson(json: String): Alert {
+            val jo = JSONObject(json)
+            return Alert(jo.getInt("type"), jo.getString("id"))
+        }
     }
 }

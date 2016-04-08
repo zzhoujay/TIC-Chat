@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import kotlinx.android.synthetic.main.item_message.view.*
+import org.jetbrains.anko.onClick
 
 /**
  * Created by zhou on 16-3-26.
@@ -12,14 +13,18 @@ import kotlinx.android.synthetic.main.item_message.view.*
 class MessageHolder(val root: View) : RecyclerView.ViewHolder(root) {
 
     val icon: ImageView
-    val name: TextView
     val time: TextView
     val content: TextView
 
+    val onClickListener: ((Int) -> Unit)? = null
+
     init {
         icon = root.icon
-        name = root.name
         time = root.time
         content = root.content
+
+        root.onClick {
+            onClickListener?.invoke(adapterPosition)
+        }
     }
 }

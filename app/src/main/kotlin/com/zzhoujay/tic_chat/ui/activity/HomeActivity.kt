@@ -1,5 +1,6 @@
 package com.zzhoujay.tic_chat.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentPagerAdapter
@@ -17,6 +18,14 @@ import kotlinx.android.synthetic.main.activity_home.*
  * Created by zhou on 16-3-24.
  */
 class HomeActivity : BaseActivity() {
+
+    companion object {
+        const val requestCodeNewTopic = 0x12
+
+        const val start_flag = "start_flag"
+
+        const val start_message = 0x233
+    }
 
     val fragments: Array<Fragment> by lazy { arrayOf<Fragment>(TopicsFragment(), MessageFragment(), ProfileFragment()) }
     val tabTitles: Array<String> by lazy { resources.getStringArray(R.array.home_tabs) }
@@ -48,5 +57,12 @@ class HomeActivity : BaseActivity() {
 
         viewPager.adapter = adapter
         tabLayout.setupWithViewPager(viewPager)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == requestCodeNewTopic && resultCode == RESULT_OK) {
+            (fragments[0] as TopicsFragment).refresh()
+        }
     }
 }

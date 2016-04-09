@@ -32,6 +32,30 @@ import kotlin.properties.Delegates
  * Created by zhou on 16-3-24.
  */
 class TopicsFragment : ListFragment<Topic>() {
+    override val refresh: FindListener<Topic> by lazy {
+        object : FindListener<Topic>() {
+            override fun onSuccess(p0: MutableList<Topic>?) {
+                refreshHandler.invoke(0, null, p0)
+            }
+
+            override fun onError(p0: Int, p1: String?) {
+                refreshHandler.invoke(p0, p1, null)
+            }
+
+        }
+    }
+    override val loadMore: FindListener<Topic> by lazy {
+        object : FindListener<Topic>() {
+            override fun onSuccess(p0: MutableList<Topic>?) {
+                loadMoreHandler.invoke(0, null, p0)
+            }
+
+            override fun onError(p0: Int, p1: String?) {
+                loadMoreHandler.invoke(p0, p1, null)
+            }
+
+        }
+    }
     override var layoutManager: RecyclerView.LayoutManager by Delegates.notNull<RecyclerView.LayoutManager>()
     override var useRecyclerView: RecyclerView by Delegates.notNull<RecyclerView>()
     override var useSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull<SwipeRefreshLayout>()
@@ -47,7 +71,7 @@ class TopicsFragment : ListFragment<Topic>() {
     }
     override val dataAdapter: TopicAdapter by lazy {
         val a = TopicAdapter()
-        a.onTopicClickListener = {
+        a.onItemClickListener = {
             context.startActivity<TopicDetailActivity>(Topic.TOPIC to it)
         }
         a.realPosition = { it - wrapperAdapter.headerCount() }

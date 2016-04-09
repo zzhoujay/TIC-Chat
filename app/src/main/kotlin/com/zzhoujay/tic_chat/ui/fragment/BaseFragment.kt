@@ -34,4 +34,8 @@ open class BaseFragment : Fragment() {
     fun finish() {
         activity?.finish()
     }
+
+    fun post(t: () -> Unit) {
+        view?.post (t)
+    }
 }

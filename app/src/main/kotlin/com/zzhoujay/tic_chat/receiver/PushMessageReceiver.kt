@@ -1,6 +1,5 @@
 package com.zzhoujay.tic_chat.receiver
 
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -9,17 +8,9 @@ import android.support.v4.app.NotificationManagerCompat
 import android.support.v7.app.NotificationCompat
 import android.util.Log
 import cn.bmob.push.PushConstants
-import cn.bmob.v3.BmobQuery
-import cn.bmob.v3.listener.GetListener
-import com.google.gson.TypeAdapter
-import com.google.gson.TypeAdapterFactory
-import com.google.gson.reflect.TypeToken
-import com.zzhoujay.tic_chat.App
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.data.Alert
-import com.zzhoujay.tic_chat.data.Message
 import com.zzhoujay.tic_chat.ui.activity.HomeActivity
-import java.lang.reflect.Type
 
 /**
  * Created by zhou on 16-3-23.
@@ -31,19 +22,7 @@ class PushMessageReceiver : BroadcastReceiver() {
             Log.i("message", "message:$msg")
             val alert = Alert.fromJson(msg)
             if (alert.type == Alert.type_message) {
-                showNotification(context!!)
-                //                val query = BmobQuery<Message>()
-                //                query.include("fromUser.profile,targetUser.profile,targetTopic,targetReply")
-                //                query.getObject(context, alert.id, object : GetListener<Message>() {
-                //                    override fun onSuccess(p0: Message?) {
-                //                        Log.i("receive", "message:$p0")
-                //
-                //                    }
-                //
-                //                    override fun onFailure(code: Int, msg: String?) {
-                //                        Log.i("getObject", "code:$code,msg:$msg")
-                //                    }
-                //                })
+                Log.i("alert","alert:$alert")
             }
         }
         Log.i("receive", "intent:$intent")

@@ -22,7 +22,7 @@ class ReplyAdapter() : NormalAdapter<Reply>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
         val holder = ReplyHolder(LayoutInflater.from(parent!!.context).inflate(R.layout.item_reply, parent, false))
-        holder.onLongClick = onLongClick
+        holder.onLongClickListener = onLongClick
         return holder
     }
 

@@ -13,6 +13,8 @@ import android.view.ViewGroup
 import cn.bmob.v3.BmobQuery
 import cn.bmob.v3.BmobUser
 import cn.bmob.v3.datatype.BmobPointer
+import cn.bmob.v3.listener.FindListener
+import cn.bmob.v3.listener.GetListener
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.common.Configuration
 import com.zzhoujay.tic_chat.data.*
@@ -28,6 +30,31 @@ import kotlin.properties.Delegates
  * Created by zhou on 16-3-26.
  */
 class TopicDetailFragment : ListFragment<Reply>() {
+
+    override val refresh: FindListener<Reply> by lazy {
+        object : FindListener<Reply>() {
+            override fun onSuccess(p0: MutableList<Reply>?) {
+                refreshHandler.invoke(0, null, p0)
+            }
+
+            override fun onError(p0: Int, p1: String?) {
+                refreshHandler.invoke(p0, p1, null)
+            }
+
+        }
+    }
+    override val loadMore: FindListener<Reply> by lazy {
+        object : FindListener<Reply>() {
+            override fun onSuccess(p0: MutableList<Reply>?) {
+                loadMoreHandler.invoke(0, null, p0)
+            }
+
+            override fun onError(p0: Int, p1: String?) {
+                loadMoreHandler.invoke(p0, p1, null)
+            }
+        }
+    }
+
     override var useRecyclerView: RecyclerView by Delegates.notNull<RecyclerView>()
     override var useSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull<SwipeRefreshLayout>()
     override var layoutManager: RecyclerView.LayoutManager by Delegates.notNull<RecyclerView.LayoutManager>()
@@ -73,7 +100,7 @@ class TopicDetailFragment : ListFragment<Reply>() {
         }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return  inflater?.inflate(R.layout.fragment_topic_detail, container, false)
+        return inflater?.inflate(R.layout.fragment_topic_detail, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -84,6 +111,7 @@ class TopicDetailFragment : ListFragment<Reply>() {
 
         if (arguments.containsKey(Topic.TOPIC)) {
             wrapperAdapter.topic = arguments.getSerializable(Topic.TOPIC) as Topic
+            useRecyclerView.post { refreshTopic() }
         }
 
         replyContent.addTextChangedListener(object : SimpleTextWatcher() {
@@ -119,5 +147,28 @@ class TopicDetailFragment : ListFragment<Reply>() {
                 }
             }))
         }
+    }
+
+    fun refreshTopic() {
+        loading(useSwipeRefreshLayout) {
+            val query = BmobQuery<Topic>()
+            query.include("author.profile")
+            query.getObject(context, wrapperAdapter.topic?.objectId, object : GetListener<Topic>() {
+                override fun onSuccess(p0: Topic?) {
+                    isRefreshing = false
+                    wrapperAdapter.topic = p0
+                }
+
+                override fun onFailure(p0: Int, p1: String?) {
+                    isRefreshing = false
+                    Log.i("refreshTopic", "code:$p0,msg:$p1")
+                }
+            })
+        }
+    }
+
+    override fun refresh() {
+        refreshTopic()
+        super.refresh()
     }
 }

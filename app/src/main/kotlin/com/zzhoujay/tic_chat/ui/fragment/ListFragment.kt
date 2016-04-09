@@ -30,6 +30,40 @@ abstract class ListFragment<T> : BaseFragment() {
     abstract val refreshQuerySize: Int
     abstract val loadMoreQuerySize: Int
 
+    abstract val refresh: FindListener<T>
+    abstract val loadMore: FindListener<T>
+
+    val refreshHandler: ((Int, String?, List<T>?) -> Unit) by lazy {
+        object : (Int, String?, List<T>?) -> Unit {
+            override fun invoke(code: Int, msg: String?, list: List<T>?) {
+                useSwipeRefreshLayout.isRefreshing = false
+                if (code == 0) {
+                    val nomoreData = list?.size ?: 0 < refreshQuerySize
+                    dataAdapter.reset(list)
+                    wrapperAdapter.state = if (nomoreData) LoadMoreHolder.State.nomore else LoadMoreHolder.State.ready
+                } else {
+                    wrapperAdapter.state = LoadMoreHolder.State.error
+                    Log.i("onError", "code:$code,msg:$msg")
+                }
+            }
+        }
+    }
+
+    val loadMoreHandler: ((Int, String?, List<T>?) -> Unit) by lazy {
+        object : (Int, String?, List<T>?) -> Unit {
+            override fun invoke(code: Int, msg: String?, list: List<T>?) {
+                if (code == 0) {
+                    val nomoreData = list?.size ?: 0 < loadMoreQuerySize
+                    dataAdapter.add(list)
+                    wrapperAdapter.state = if (nomoreData) LoadMoreHolder.State.nomore else LoadMoreHolder.State.ready
+                } else {
+                    wrapperAdapter.state = LoadMoreHolder.State.error
+                    Log.i("onError", "code:$code,msg:$msg")
+                }
+            }
+        }
+    }
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -40,38 +74,15 @@ abstract class ListFragment<T> : BaseFragment() {
         useRecyclerView.post { refresh() }
     }
 
-    fun refresh() {
+    open fun refresh() {
         loading(useSwipeRefreshLayout) {
             wrapperAdapter.resetState()
-            refreshQuery.findObjects(context, object : FindListener<T>() {
-                override fun onSuccess(p0: MutableList<T>?) {
-                    isRefreshing = false
-                    val nomoreData = p0?.size ?: 0 < refreshQuerySize
-                    dataAdapter.add(p0)
-                    wrapperAdapter.state = if (nomoreData) LoadMoreHolder.State.nomore else LoadMoreHolder.State.ready
-                }
-
-                override fun onError(code: Int, msg: String?) {
-                    isRefreshing = false
-                    Log.i("onError", "code:$code,msg:$msg")
-                }
-            })
+            refreshQuery.findObjects(context,refresh)
         }
     }
 
-    fun loadMore() {
-        loadMoreQuery.findObjects(context, object : FindListener<T>() {
-            override fun onError(code: Int, msg: String?) {
-                wrapperAdapter.state = LoadMoreHolder.State.error
-                Log.i("onError", "code:$code,msg:$msg")
-            }
-
-            override fun onSuccess(p0: MutableList<T>?) {
-                val nomoreData = p0?.size ?: 0 < loadMoreQuerySize
-                dataAdapter.add(p0)
-                wrapperAdapter.state = if (nomoreData) LoadMoreHolder.State.nomore else LoadMoreHolder.State.ready
-            }
-        })
+    open fun loadMore() {
+        loadMoreQuery.findObjects(context,loadMore)
     }
 
     override fun onDestroyView() {

@@ -11,7 +11,7 @@ import org.json.JSONObject
  * Created by zhou on 16-3-24.
  */
 
-class User(var profile: Profile?) : BmobUser() {
+class User(var profile: Profile) : BmobUser() {
 
 }
 
@@ -52,7 +52,7 @@ class Installation(var user: User?) : BmobInstallation(App.app) {
     }
 }
 
-class Message(val type: Int, var fromUser: User, var targetUser: User, var targetTopic: Topic, var targetReply: Reply) : BmobObject() {
+class Message(val type: Int=Message.type_reply_topic, var fromUser: User, var targetUser: User, var targetTopic: Topic, var targetReply: Reply) : BmobObject() {
     override fun toString(): String {
         return "Message(type:$type,fromUser=$fromUser, targetUser=$targetUser, targetTopic=$targetTopic, targetReply=$targetReply)"
     }

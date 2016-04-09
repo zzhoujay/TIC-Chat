@@ -14,6 +14,10 @@ import java.util.*
  */
 class MessageAdapter() : NormalAdapter<Message>() {
 
+    private val onClickListener: ((Int) -> Unit) = {
+        val position = realPosition(it)
+        onItemClickListener?.invoke(list[position])
+    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
         if (holder is MessageHolder) {
@@ -23,8 +27,8 @@ class MessageAdapter() : NormalAdapter<Message>() {
 
             Glide.with(holder.icon.context).load(fromUser.profile?.avatar?.getFileUrl(holder.icon.context)).into(holder.icon)
             val content = when (message.type) {
-                Message.type_reply_topic -> "${fromUser.profile?.name}在${topic.title}中回复了你"
-                Message.type_quote_reply -> "${fromUser.profile?.name}在${topic.title}中提到了你"
+                Message.type_reply_topic -> "\"${fromUser.profile?.name}\"在\"${topic.title}\"中回复了你"
+                Message.type_quote_reply -> "\"${fromUser.profile?.name}\"在\"${topic.title}\"中提到了你"
                 else -> ""
             }
             holder.content.text = content
@@ -34,6 +38,7 @@ class MessageAdapter() : NormalAdapter<Message>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
         val holder = MessageHolder(LayoutInflater.from(parent!!.context).inflate(R.layout.item_message, parent, false))
+        holder.onClickListener = onClickListener
         return holder
     }
 

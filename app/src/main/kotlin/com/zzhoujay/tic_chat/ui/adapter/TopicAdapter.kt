@@ -13,16 +13,14 @@ import com.zzhoujay.tic_chat.ui.adapter.holder.TopicHolder
  */
 class TopicAdapter() : NormalAdapter<Topic>() {
 
-    var onTopicClickListener: ((Topic) -> Unit)? = null
-
-    val onItemClickListener: ((position: Int) -> Unit) = {
+    val onClickListener: ((position: Int) -> Unit) = {
         val rp = realPosition(it)
-        onTopicClickListener?.invoke(list[rp])
+        onItemClickListener?.invoke(list[rp])
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
         val holder = TopicHolder(LayoutInflater.from(parent!!.context).inflate(R.layout.item_topic, parent, false))
-        holder.clickListener = onItemClickListener
+        holder.onClickListener = onClickListener
         return holder
     }
 

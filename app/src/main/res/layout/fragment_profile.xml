@@ -1,46 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="10dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingTop="10dp">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="20dp">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/icon"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="5dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_icon" />
+            <RelativeLayout
+                style="@style/SettingItem"
+                android:layout_marginBottom="30dp">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_margin="5dp"
-                android:layout_toEndOf="@id/icon"
-                android:layout_toRightOf="@id/icon"
-                android:text="@string/test_name"
-                android:textColor="@color/material_grey_700"
-                android:textSize="@dimen/font_mid" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/icon"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_icon" />
 
-        </RelativeLayout>
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="5dp"
+                    android:layout_toEndOf="@id/icon"
+                    android:layout_toRightOf="@id/icon"
+                    android:text="@string/test_name"
+                    android:textColor="@color/material_grey_700"
+                    android:textSize="@dimen/font_mid" />
 
-        <View style="@style/Gap" />
+                <View
+                    style="@style/Gap"
+                    android:layout_alignParentBottom="true" />
+            </RelativeLayout>
+
+            <LinearLayout
+                style="@style/SettingItem"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatImageView
+                    style="@style/SettingIcon"
+                    app:srcCompat="@drawable/ic_account_circle_black_24dp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/SettingText"
+                    android:text="我的资料" />
+
+            </LinearLayout>
+
+            <View style="@style/Gap"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"/>
+
+            <LinearLayout
+                style="@style/SettingItem"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatImageView
+                    style="@style/SettingIcon"
+                    app:srcCompat="@drawable/ic_settings_black_24dp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/SettingText"
+                    android:text="设置" />
+
+            </LinearLayout>
+
+            <View style="@style/Gap"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"/>
 
 
-    </LinearLayout>
+        </LinearLayout>
 
-</android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.v4.widget.SwipeRefreshLayout>

@@ -1,6 +1,5 @@
 package com.zzhoujay.tic_chat.ui.adapter.holder
 
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -10,13 +9,11 @@ import org.jetbrains.anko.onClick
 /**
  * Created by zhou on 16-3-26.
  */
-class MessageHolder(val root: View) : RecyclerView.ViewHolder(root) {
+class MessageHolder(val root: View) :ClickableHolder(root) {
 
     val icon: ImageView
     val time: TextView
     val content: TextView
-
-    val onClickListener: ((Int) -> Unit)? = null
 
     init {
         icon = root.icon

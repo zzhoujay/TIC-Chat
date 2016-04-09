@@ -1,52 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/Clickable"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:paddingTop="5dp">
+    android:paddingTop="8dp">
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
+        android:gravity="center_vertical"
         android:layout_height="wrap_content">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/icon"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_centerVertical="true"
             android:layout_margin="5dp"
             android:src="@drawable/ic_icon" />
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_margin="3dp"
-            android:text="2016-03-26"
-            android:textColor="@color/material_grey_500"
-            android:textSize="@dimen/font_small" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:id="@+id/content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/name"
             android:layout_margin="5dp"
-            android:layout_toEndOf="@id/icon"
-            android:layout_toRightOf="@id/icon"
             android:text="@string/test_message"
             android:textColor="@color/material_grey_600"
-            android:textSize="@dimen/font_content" />
+            android:textSize="@dimen/font_content"
+            tools:ignore="PrivateResource" />
 
+    </LinearLayout>
 
-    </RelativeLayout>
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/time"
+        android:gravity="end"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:text="@string/test_time"
+        android:textColor="@color/material_grey_500"
+        android:textSize="@dimen/font_small" />
 
     <View style="@style/Gap" />
 

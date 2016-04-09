@@ -9,6 +9,7 @@ import java.util.*
  */
 abstract class NormalAdapter<T> : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var realPosition: (Int) -> Int = { it }
+    var onItemClickListener: ((t: T) -> Unit)? = null
 
     protected val list: MutableList<T> by lazy { ArrayList<T>() }
 

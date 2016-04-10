@@ -1,4 +1,4 @@
-package com.zzhoujay.tic_chat.ui.weiget
+package com.zzhoujay.tic_chat.ui.widget
 
 import android.os.Parcel
 import android.text.style.ForegroundColorSpan

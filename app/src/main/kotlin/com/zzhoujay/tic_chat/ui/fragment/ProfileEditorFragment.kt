@@ -4,15 +4,15 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.KeyListener
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.EditText
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.data.Profile
 import com.zzhoujay.tic_chat.util.SimpleTextWatcher
+import com.zzhoujay.tic_chat.util.SimpleUpdateListener
+import com.zzhoujay.tic_chat.util.progress
+import com.zzhoujay.tic_chat.util.toast
 import kotlinx.android.synthetic.main.fragment_profile_editor.*
-import org.jetbrains.anko.AlertDialogBuilder
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.onClick
 import kotlin.properties.Delegates
@@ -22,28 +22,58 @@ import kotlin.properties.Delegates
  */
 class ProfileEditorFragment : BaseFragment() {
 
+    companion object {
+        const val status_before = 0
+        const val status_on = 1
+        const val status_after = 2
+    }
+
     var edits: Array<EditText> by Delegates.notNull<Array<EditText>>()
-    var keyListener: KeyListener by Delegates.notNull<KeyListener>()
+    var keyListener: KeyListener? = null
     var useProfile: Profile by Delegates.notNull<Profile>()
 
-    var updateEnable: Boolean = false
+    var editStatus: Int = status_before
+        set(value) {
+            if (value == status_before) {
+                editActionMenu?.setIcon(R.drawable.ic_create_black_24dp)
+            } else if (value == status_after) {
+                editActionMenu?.setIcon(R.drawable.ic_done_black_24dp)
+            } else {
+                editActionMenu?.icon = null
+            }
+            field = value
+        }
 
-    var editable: Boolean = false
+    var editTextEditable: Boolean = false
         set(value) {
             if (!value) {
                 keyListener = edits[0].keyListener
                 edits.forEach { it.keyListener = null }
             } else {
-                edits.forEach { it.keyListener = keyListener }
+                if (keyListener != null)
+                    edits.forEach { it.keyListener = keyListener }
             }
+            field = value
+        }
+
+    var editable: Boolean = false
+        set(value) {
+            editActionMenu?.isVisible = value
+            field = value
         }
     val updateEnableWatch: TextWatcher by lazy {
         object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable?) {
                 super.afterTextChanged(s)
-                updateEnable = true
+                editStatus = status_after
             }
         }
+    }
+    var editActionMenu: MenuItem? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -54,7 +84,8 @@ class ProfileEditorFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         edits = arrayOf(edit_qq, edit_college, edit_email, edit_home, edit_name)
-        editable = false
+
+        editTextEditable = false
 
         if (arguments.containsKey(Profile.PROFILE)) {
             useProfile = arguments.getSerializable(Profile.PROFILE) as Profile
@@ -65,6 +96,8 @@ class ProfileEditorFragment : BaseFragment() {
 
         edit_sex.onClick { selectSex() }
         edit_age.onClick { selectAge() }
+
+        editable = true
     }
 
     fun setUpProfile(profile: Profile) {
@@ -84,6 +117,15 @@ class ProfileEditorFragment : BaseFragment() {
         useProfile.home = edit_home.text.toString()
         useProfile.college = edit_college.text.toString()
         useProfile.name = edit_name.text.toString()
+
+        progress(false, "正在更新资料") {
+            useProfile.update(context, SimpleUpdateListener({ code, msg ->
+                dismiss()
+                if (code != 0) {
+                    toast("code:$code,msg:$msg")
+                }
+            }))
+        }
     }
 
     fun selectSex() {
@@ -96,7 +138,7 @@ class ProfileEditorFragment : BaseFragment() {
                     else -> 0
                 }
                 edit_sex.text = Profile.sex(useProfile.sex)
-                updateEnable = true
+                editStatus = status_after
             }
         }.show()
     }
@@ -106,11 +148,44 @@ class ProfileEditorFragment : BaseFragment() {
             title("请选择年龄")
             items((0..100).toList().map { "$it" }) {
                 useProfile.age = it
-                updateEnable = true
+                editStatus = status_after
                 edit_age.text = "$it"
             }
         }.show()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.action_profile_editor, menu)
+        editActionMenu = menu!!.findItem(R.id.action_profile_editor)
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == R.id.action_profile_editor && editable) {
+            when (editStatus) {
+                status_before -> {
+                    editTextEditable = true
+                    editStatus = status_on
+                }
+                status_after -> {
+                    updateProfile()
+                    editStatus = status_before
+                    editTextEditable = false
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?) {
+        super.onPrepareOptionsMenu(menu)
+        editActionMenu?.isVisible = editable
+        if (editStatus == status_before) {
+            editActionMenu?.setIcon(R.drawable.ic_create_black_24dp)
+        } else if (editStatus == status_after) {
+            editActionMenu?.setIcon(R.drawable.ic_done_black_24dp)
+        } else {
+            editActionMenu?.icon = null
+        }
+    }
 }

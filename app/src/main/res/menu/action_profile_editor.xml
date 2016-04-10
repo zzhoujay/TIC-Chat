@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_profile_editor"
+        android:icon="@drawable/ic_create_black_24dp"
+        android:title="profile_editor"
+        app:showAsAction="always" />
+</menu>

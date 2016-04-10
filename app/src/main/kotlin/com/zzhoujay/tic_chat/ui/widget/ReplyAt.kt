@@ -1,4 +1,4 @@
-package com.zzhoujay.tic_chat.ui.weiget
+package com.zzhoujay.tic_chat.ui.widget
 
 import android.support.v4.content.ContextCompat
 import com.zzhoujay.tic_chat.App

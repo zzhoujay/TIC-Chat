@@ -44,6 +44,13 @@
             android:name=".ui.activity.NewTopicActivity"
             android:theme="@style/AppTheme.NewTopic" />
 
+        <activity
+            android:name=".ui.activity.AccountManagerActivity"
+            android:theme="@style/AppTheme.SwipeBack" />
+        <activity
+            android:name=".ui.activity.ProfileEditorActivity"
+            android:theme="@style/AppTheme.ProfileEditor" />
+
         <receiver android:name=".receiver.PushMessageReceiver">
             <intent-filter>
                 <action android:name="cn.bmob.push.action.MESSAGE" />

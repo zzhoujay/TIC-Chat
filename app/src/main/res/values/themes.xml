@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="tool_bar_color">@color/colorPrimary</item>
+
+        <item name="android:windowTranslucentStatus" tools:ignore="NewApi">true</item>
+    </style>
+
+    <style name="AppTheme.SwipeBack" parent="AppTheme.Home">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
+    </style>
+
+    <style name="AppTheme.Login">
+        <item name="colorPrimary">@color/colorPrimaryLogin</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkLogin</item>
+        <item name="colorAccent">@color/colorAccentLogin</item>
+
+        <item name="android:background">@color/colorPrimaryLogin</item>
+    </style>
+
+    <style name="AppTheme.Home" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+    </style>
+
+    <style name="AppTheme.Detail" parent="AppTheme.SwipeBack" />
+
+    <style name="AppTheme.NewTopic" parent="AppTheme.SwipeBack" />
+
+    <style name="AppTheme.ProfileEditor" parent="AppTheme.SwipeBack">
+        <item name="colorPrimary">@color/material_lightBlue_500</item>
+        <item name="colorPrimaryDark">@color/material_lightBlue_600</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+</resources>

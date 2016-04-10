@@ -12,13 +12,19 @@ import com.bumptech.glide.Glide
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.data.Profile
 import com.zzhoujay.tic_chat.data.User
+import com.zzhoujay.tic_chat.ui.activity.ProfileEditorActivity
 import com.zzhoujay.tic_chat.util.loading
 import kotlinx.android.synthetic.main.fragment_profile.*
+import org.jetbrains.anko.onClick
+import org.jetbrains.anko.startActivity
+import kotlin.properties.Delegates
 
 /**
  * Created by zhou on 16-3-24.
  */
 class ProfileFragment : BaseFragment() {
+
+    var useProfile: Profile by Delegates.notNull<Profile>()
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.fragment_profile, container, false)
@@ -27,12 +33,17 @@ class ProfileFragment : BaseFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        profile.onClick {
+            context.startActivity<ProfileEditorActivity>(Profile.PROFILE to useProfile)
+        }
+
         swipeRefreshLayout.setOnRefreshListener { refreshUserProfile() }
 
         post { refreshUserProfile() }
     }
 
     fun setUpUserProfile(profile: Profile) {
+        useProfile = profile
         Glide.with(this).load(profile.avatar?.getFileUrl(context)).into(icon)
         name.text = profile.name
     }

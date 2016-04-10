@@ -45,6 +45,7 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/profile"
                 style="@style/SettingItem"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -59,11 +60,13 @@
 
             </LinearLayout>
 
-            <View style="@style/Gap"
+            <View
+                style="@style/Gap"
                 android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"/>
+                android:layout_marginRight="20dp" />
 
             <LinearLayout
+                android:id="@+id/setting"
                 style="@style/SettingItem"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -78,9 +81,10 @@
 
             </LinearLayout>
 
-            <View style="@style/Gap"
+            <View
+                style="@style/Gap"
                 android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"/>
+                android:layout_marginRight="20dp" />
 
 
         </LinearLayout>

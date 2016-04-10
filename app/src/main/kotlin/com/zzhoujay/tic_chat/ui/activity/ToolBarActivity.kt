@@ -1,10 +1,13 @@
 package com.zzhoujay.tic_chat.ui.activity
 
+import android.graphics.Color
 import android.os.Bundle
+import android.support.design.widget.CoordinatorLayout
 import android.support.v4.app.Fragment
 import android.view.MenuItem
 import com.zzhoujay.tic_chat.R
 import kotlinx.android.synthetic.main.activity_tool_bar.*
+import org.jetbrains.anko.backgroundColor
 
 /**
  * Created by zhou on 16-3-23.
@@ -24,6 +27,20 @@ open class ToolBarActivity : BaseActivity() {
                 supportFragmentManager.beginTransaction().replace(R.id.container, value).commitAllowingStateLoss()
             }
             field = value
+        }
+    private var containerMarginTop: Int = 0
+    private var toolBarBackground: Int = 0
+    var toolBarTranslate: Boolean = false
+        set(value) {
+            val lp = container.layoutParams as CoordinatorLayout.LayoutParams
+            if (true) {
+                if (lp.topMargin != 0) containerMarginTop = lp.topMargin
+                lp.topMargin = 0
+                toolBar.backgroundColor = Color.TRANSPARENT
+            } else {
+                if (containerMarginTop != 0)
+                    lp.topMargin = containerMarginTop
+            }
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {

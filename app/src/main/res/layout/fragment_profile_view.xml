@@ -56,7 +56,6 @@
                     android:textSize="@dimen/font_mid" />
 
                 <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/edit_qq"
                     style="@style/ProfileRight"
                     android:singleLine="true"
                     android:text="123456789" />
@@ -75,7 +74,6 @@
                     android:textSize="@dimen/font_mid" />
 
                 <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/edit_email"
                     style="@style/ProfileRight"
                     android:singleLine="true"
                     android:text="123456789@qq.com" />
@@ -94,7 +92,6 @@
                     android:textSize="@dimen/font_mid" />
 
                 <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/edit_name"
                     style="@style/ProfileRight"
                     android:singleLine="true"
                     android:text="渣渣" />
@@ -112,9 +109,8 @@
                     android:text="年龄"
                     android:textSize="@dimen/font_mid" />
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/edit_age"
-                    style="@style/ProfileRight.Select"
+                <android.support.v7.widget.AppCompatEditText
+                    style="@style/ProfileRight"
                     android:singleLine="true"
                     android:text="19" />
 
@@ -133,7 +129,6 @@
                     android:textSize="@dimen/font_mid" />
 
                 <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/edit_home"
                     style="@style/ProfileRight"
                     android:singleLine="true"
                     android:text="湖南岳阳" />
@@ -151,9 +146,8 @@
                     android:text="性别"
                     android:textSize="@dimen/font_mid" />
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/edit_sex"
-                    style="@style/ProfileRight.Select"
+                <android.support.v7.widget.AppCompatEditText
+                    style="@style/ProfileRight"
                     android:singleLine="true"
                     android:text="男" />
 
@@ -171,7 +165,6 @@
                     android:textSize="@dimen/font_mid" />
 
                 <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/edit_college"
                     style="@style/ProfileRight"
                     android:singleLine="true"
                     android:text="计算机" />
@@ -185,13 +178,11 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/avatar"
-            style="@style/Clickable"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="@dimen/profile_avatar_margin_top"
-            android:clickable="false"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_icon"
             app:civ_border_color="@color/material_white"

@@ -15,9 +15,21 @@ class User(var profile: Profile) : BmobUser() {
 
 }
 
-class Profile(var name: String = "", var qq: String = "", var avatar: BmobFile? = null) : BmobObject() {
+class Profile(var name: String = "", var email: String = "", var age: Int = 0, var home: String = "", var sex: Int = 0, var qq: String = "", var college: String = "", var avatar: BmobFile? = null) : BmobObject() {
     override fun toString(): String {
         return "Profile(name='$name', qq='$qq')"
+    }
+
+    companion object {
+        const val PROFILE = "profile"
+
+        fun sex(sex: Int): String {
+            return when (sex) {
+                1 -> "男"
+                -1 -> "女"
+                else -> "保密"
+            }
+        }
     }
 }
 
@@ -35,7 +47,6 @@ class Topic(var title: String = "", var content: String = "", var reply: Int = 0
         const val TOPIC_LIST = "topic_list"
     }
 
-
 }
 
 class Reply(var content: String = "", var quote: Reply? = null, var author: User, var topic: Topic) : BmobObject() {
@@ -52,7 +63,7 @@ class Installation(var user: User?) : BmobInstallation(App.app) {
     }
 }
 
-class Message(val type: Int=Message.type_reply_topic, var fromUser: User, var targetUser: User, var targetTopic: Topic, var targetReply: Reply) : BmobObject() {
+class Message(val type: Int = Message.type_reply_topic, var fromUser: User, var targetUser: User, var targetTopic: Topic, var targetReply: Reply) : BmobObject() {
     override fun toString(): String {
         return "Message(type:$type,fromUser=$fromUser, targetUser=$targetUser, targetTopic=$targetTopic, targetReply=$targetReply)"
     }

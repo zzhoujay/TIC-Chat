@@ -111,7 +111,7 @@ class RegisterFragment : BaseFragment() {
                 val pd = password.editText!!.text.toString()
                 val em = email.editText!!.text.toString()
 
-                val user = User(Profile(ac))
+                val user = User(Profile(ac,em))
                 user.username = ac
                 user.setPassword(pd)
                 user.email = em

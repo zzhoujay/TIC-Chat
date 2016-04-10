@@ -1,42 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-
-        <item name="tool_bar_color">@color/colorPrimary</item>
-
-        <item name="android:windowTranslucentStatus" tools:ignore="NewApi">true</item>
-    </style>
-
-    <style name="AppTheme.SwipeBack" parent="AppTheme.Home">
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
-        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
-    </style>
-
-    <style name="AppTheme.Login">
-        <item name="colorPrimary">@color/colorPrimaryLogin</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDarkLogin</item>
-        <item name="colorAccent">@color/colorAccentLogin</item>
-
-        <item name="android:background">@color/colorPrimaryLogin</item>
-    </style>
-
-    <style name="AppTheme.Home" parent="Theme.AppCompat.Light.NoActionBar">
-
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-
-    </style>
-
-    <style name="AppTheme.Detail" parent="AppTheme.SwipeBack" />
-
-    <style name="AppTheme.NewTopic" parent="AppTheme.SwipeBack" />
+<resources>
 
     <style name="InputLayout">
         <item name="android:layout_width">match_parent</item>
@@ -102,8 +64,8 @@
     </style>
 
     <style name="SettingIcon">
-        <item name="android:layout_width">45dp</item>
-        <item name="android:layout_height">45dp</item>
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
         <item name="android:layout_margin">8dp</item>
     </style>
 
@@ -112,6 +74,35 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">10dp</item>
         <item name="android:textSize">@dimen/font_content</item>
+    </style>
+
+    <style name="ProfileLeft">
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:layout_width">@dimen/profile_left_width</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/profile_left_margin</item>
+        <item name="android:layout_marginBottom">@dimen/profile_left_margin</item>
+    </style>
+
+    <style name="ProfileRight">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/profile_right_margin</item>
+        <item name="android:layout_marginTop">@dimen/profile_left_margin</item>
+        <item name="android:layout_marginBottom">@dimen/profile_left_margin</item>
+        <item name="android:layout_marginRight">@dimen/profile_left_margin</item>
+    </style>
+
+    <style name="ProfileRight.Select" parent="Clickable">
+        <item name="android:padding">6dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/profile_right_margin</item>
+        <item name="android:layout_marginTop">@dimen/profile_left_margin</item>
+        <item name="android:layout_marginBottom">@dimen/profile_left_margin</item>
+        <item name="android:layout_marginRight">@dimen/profile_left_margin</item>
+        <item name="android:textSize">@dimen/font_mid</item>
+        <item name="android:textColor">@color/material_grey_800</item>
     </style>
 
 </resources>

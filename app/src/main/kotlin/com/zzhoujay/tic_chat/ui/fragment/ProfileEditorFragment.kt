@@ -1,11 +1,13 @@
 package com.zzhoujay.tic_chat.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.KeyListener
 import android.view.*
 import android.widget.EditText
+import cn.bmob.v3.datatype.BmobFile
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.data.Profile
 import com.zzhoujay.tic_chat.util.SimpleTextWatcher
@@ -15,6 +17,7 @@ import com.zzhoujay.tic_chat.util.toast
 import kotlinx.android.synthetic.main.fragment_profile_editor.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.onClick
+import java.io.File
 import kotlin.properties.Delegates
 
 /**
@@ -26,6 +29,7 @@ class ProfileEditorFragment : BaseFragment() {
         const val status_before = 0
         const val status_on = 1
         const val status_after = 2
+        const val status_updating = 3
     }
 
     var edits: Array<EditText> by Delegates.notNull<Array<EditText>>()
@@ -53,6 +57,9 @@ class ProfileEditorFragment : BaseFragment() {
                 if (keyListener != null)
                     edits.forEach { it.keyListener = keyListener }
             }
+            edit_age.isClickable = value
+            edit_sex.isClickable = value
+            avatar.isClickable=value
             field = value
         }
 
@@ -70,6 +77,7 @@ class ProfileEditorFragment : BaseFragment() {
         }
     }
     var editActionMenu: MenuItem? = null
+    var selectIcon: BmobFile? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,6 +105,8 @@ class ProfileEditorFragment : BaseFragment() {
         edit_sex.onClick { selectSex() }
         edit_age.onClick { selectAge() }
 
+        avatar.onClick { selectIcon() }
+
         editable = true
     }
 
@@ -106,24 +116,34 @@ class ProfileEditorFragment : BaseFragment() {
         edit_age.text = "${profile.age}"
         edit_home.setText(profile.home)
         edit_college.setText(profile.college)
-        edit_sex.text = Profile.sex(profile.sex)
+        edit_sex.text = Profile.sex(profile.sex ?: 0)
         edit_email.setText(profile.email)
     }
 
     fun updateProfile() {
-        useProfile.email = edit_email.text.toString()
-        useProfile.qq = edit_qq.text.toString()
-        useProfile.age = edit_age.text.toString().toInt()
-        useProfile.home = edit_home.text.toString()
-        useProfile.college = edit_college.text.toString()
-        useProfile.name = edit_name.text.toString()
+
+        val tempProfile = Profile()
+        tempProfile.email = edit_email.text.toString()
+        tempProfile.qq = edit_qq.text.toString()
+        tempProfile.age = edit_age.text.toString().toInt()
+        tempProfile.home = edit_home.text.toString()
+        tempProfile.college = edit_college.text.toString()
+        tempProfile.name = edit_name.text.toString()
+        tempProfile.avatar = selectIcon
+        tempProfile.objectId = useProfile.objectId
 
         progress(false, "正在更新资料") {
-            useProfile.update(context, SimpleUpdateListener({ code, msg ->
+            useProfile.update(context, useProfile.objectId, SimpleUpdateListener({ code, msg ->
                 dismiss()
-                if (code != 0) {
-                    toast("code:$code,msg:$msg")
-                }
+                editStatus = status_before
+                var profile: Profile =
+                        if (code != 0) {
+                            toast("code:$code,msg:$msg")
+                            useProfile
+                        } else {
+                            tempProfile
+                        }
+                setUpProfile(profile)
             }))
         }
     }
@@ -137,7 +157,7 @@ class ProfileEditorFragment : BaseFragment() {
                     1 -> -1
                     else -> 0
                 }
-                edit_sex.text = Profile.sex(useProfile.sex)
+                edit_sex.text = Profile.sex(useProfile.sex ?: 0)
                 editStatus = status_after
             }
         }.show()
@@ -152,6 +172,12 @@ class ProfileEditorFragment : BaseFragment() {
                 edit_age.text = "$it"
             }
         }.show()
+    }
+
+    fun selectIcon() {
+        val i = Intent(Intent.ACTION_GET_CONTENT)
+        i.type = "image/*"
+        activity.startActivityForResult(i, 0);
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -169,7 +195,7 @@ class ProfileEditorFragment : BaseFragment() {
                 }
                 status_after -> {
                     updateProfile()
-                    editStatus = status_before
+                    editStatus = status_updating
                     editTextEditable = false
                 }
             }

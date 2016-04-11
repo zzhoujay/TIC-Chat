@@ -1,6 +1,7 @@
 package com.zzhoujay.tic_chat.ui.fragment
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,12 +9,11 @@ import android.text.method.KeyListener
 import android.view.*
 import android.widget.EditText
 import cn.bmob.v3.datatype.BmobFile
+import com.bumptech.glide.Glide
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.data.Profile
-import com.zzhoujay.tic_chat.util.SimpleTextWatcher
-import com.zzhoujay.tic_chat.util.SimpleUpdateListener
-import com.zzhoujay.tic_chat.util.progress
-import com.zzhoujay.tic_chat.util.toast
+import com.zzhoujay.tic_chat.ui.activity.ProfileEditorActivity
+import com.zzhoujay.tic_chat.util.*
 import kotlinx.android.synthetic.main.fragment_profile_editor.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.onClick
@@ -38,14 +38,16 @@ class ProfileEditorFragment : BaseFragment() {
 
     var editStatus: Int = status_before
         set(value) {
-            if (value == status_before) {
-                editActionMenu?.setIcon(R.drawable.ic_create_black_24dp)
-            } else if (value == status_after) {
-                editActionMenu?.setIcon(R.drawable.ic_done_black_24dp)
-            } else {
-                editActionMenu?.icon = null
+            if (value != field) {
+                if (value == status_before) {
+                    editActionMenu?.setIcon(R.drawable.ic_create_black_24dp)
+                } else if (value == status_after) {
+                    editActionMenu?.setIcon(R.drawable.ic_done_black_24dp)
+                } else {
+                    editActionMenu?.icon = null
+                }
+                field = value
             }
-            field = value
         }
 
     var editTextEditable: Boolean = false
@@ -59,7 +61,7 @@ class ProfileEditorFragment : BaseFragment() {
             }
             edit_age.isClickable = value
             edit_sex.isClickable = value
-            avatar.isClickable=value
+            avatar.isClickable = value
             field = value
         }
 
@@ -93,7 +95,9 @@ class ProfileEditorFragment : BaseFragment() {
 
         edits = arrayOf(edit_qq, edit_college, edit_email, edit_home, edit_name)
 
-        editTextEditable = false
+        edit_age.isClickable = false
+        edit_sex.isClickable = false
+        avatar.isClickable = false
 
         if (arguments.containsKey(Profile.PROFILE)) {
             useProfile = arguments.getSerializable(Profile.PROFILE) as Profile
@@ -108,6 +112,8 @@ class ProfileEditorFragment : BaseFragment() {
         avatar.onClick { selectIcon() }
 
         editable = true
+
+        post { editTextEditable=false }
     }
 
     fun setUpProfile(profile: Profile) {
@@ -118,6 +124,10 @@ class ProfileEditorFragment : BaseFragment() {
         edit_college.setText(profile.college)
         edit_sex.text = Profile.sex(profile.sex ?: 0)
         edit_email.setText(profile.email)
+
+        Glide.with(this).load(profile.avatar?.getFileUrl(context)).into(avatar)
+
+        useProfile = profile
     }
 
     fun updateProfile() {
@@ -133,9 +143,8 @@ class ProfileEditorFragment : BaseFragment() {
         tempProfile.objectId = useProfile.objectId
 
         progress(false, "正在更新资料") {
-            useProfile.update(context, useProfile.objectId, SimpleUpdateListener({ code, msg ->
+            tempProfile.update(context, useProfile.objectId, SimpleUpdateListener({ code, msg ->
                 dismiss()
-                editStatus = status_before
                 var profile: Profile =
                         if (code != 0) {
                             toast("code:$code,msg:$msg")
@@ -144,7 +153,27 @@ class ProfileEditorFragment : BaseFragment() {
                             tempProfile
                         }
                 setUpProfile(profile)
+                editStatus=status_before
             }))
+        }
+    }
+
+    fun updateAvatar(avatarUri: Uri) {
+        if (editStatus == status_on || editStatus == status_after) {
+            val tempFile = BmobFile(File(avatarUri.path))
+            progress(false, "正在上传头像") {
+                tempFile.uploadblock(context, SimpleUploadFileListener({ code, msg ->
+                    if (code == 0) {
+                        dismiss()
+                        selectIcon = tempFile
+                        Glide.with(this@ProfileEditorFragment).load(avatarUri).into(avatar)
+                        editStatus = status_after
+                    } else {
+                        dismiss()
+                        toast("头像上传失败")
+                    }
+                }))
+            }
         }
     }
 
@@ -177,7 +206,7 @@ class ProfileEditorFragment : BaseFragment() {
     fun selectIcon() {
         val i = Intent(Intent.ACTION_GET_CONTENT)
         i.type = "image/*"
-        activity.startActivityForResult(i, 0);
+        activity.startActivityForResult(i, ProfileEditorActivity.REQUEST_CODE_PICK_AVATAR);
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

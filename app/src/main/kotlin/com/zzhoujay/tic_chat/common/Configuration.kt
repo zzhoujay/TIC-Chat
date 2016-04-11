@@ -25,4 +25,8 @@ object Configuration {
         const val default_size = 12
     }
 
+    object Temp {
+        const val avatar_temp = "avatar_temp_"
+    }
+
 }

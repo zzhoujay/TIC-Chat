@@ -48,8 +48,8 @@ fun <T : Context> T.progress(cancelAble: Boolean, msg: CharSequence, t: Progress
 fun Fragment.progress(cancelAble: Boolean, msg: CharSequence, t: ProgressDialog.() -> Unit) {
     val progressDialog = ProgressDialog(context)
     progressDialog.setMessage(msg)
-    progressDialog.show()
     progressDialog.setCancelable(cancelAble)
+    progressDialog.show()
     t.invoke(progressDialog)
 }
 
@@ -132,3 +132,6 @@ open class SimpleAnimatorListener : Animator.AnimatorListener {
     }
 }
 
+interface Task<T> : Serializable {
+    fun doTask(t: T)
+}

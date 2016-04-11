@@ -51,6 +51,10 @@
             android:name=".ui.activity.ProfileEditorActivity"
             android:theme="@style/AppTheme.ProfileEditor" />
 
+        <activity
+            android:name=".ui.activity.AvatarCropActivity"
+            android:theme="@style/AppTheme.SwipeBack" />
+
         <receiver android:name=".receiver.PushMessageReceiver">
             <intent-filter>
                 <action android:name="cn.bmob.push.action.MESSAGE" />

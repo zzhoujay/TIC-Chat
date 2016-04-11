@@ -1,9 +1,11 @@
 package com.zzhoujay.tic_chat.util
 
+import android.util.Log
 import cn.bmob.v3.BmobInstallation
 import cn.bmob.v3.BmobPushManager
 import cn.bmob.v3.listener.SaveListener
 import cn.bmob.v3.listener.UpdateListener
+import cn.bmob.v3.listener.UploadFileListener
 import com.zzhoujay.tic_chat.App
 import com.zzhoujay.tic_chat.data.Alert
 import com.zzhoujay.tic_chat.data.Installation
@@ -26,6 +28,7 @@ open class SimpleSaveListener(val t: (code: Int, msg: String?) -> Unit) : SaveLi
     }
 
     override fun onFailure(p0: Int, p1: String?) {
+        Log.i("SimpleSaveListener", "code:$p0,msg:$p1")
         t.invoke(p0, p1)
     }
 }
@@ -37,6 +40,18 @@ open class SimpleUpdateListener(val t: (code: Int, msg: String?) -> Unit) : Upda
     }
 
     override fun onFailure(p0: Int, p1: String?) {
+        Log.i("SimpleUpdateListener", "code:$p0,msg:$p1")
+        t.invoke(p0, p1)
+    }
+}
+
+open class SimpleUploadFileListener(val t: (code: Int, msg: String?) -> Unit) : UploadFileListener() {
+    override fun onSuccess() {
+        t.invoke(0, null)
+    }
+
+    override fun onFailure(p0: Int, p1: String?) {
+        Log.i("SimpleUploadFileListener", "code:$p0,msg:$p1")
         t.invoke(p0, p1)
     }
 }

@@ -13,6 +13,7 @@ import com.zzhoujay.tic_chat.ui.fragment.ProfileFragment
 import com.zzhoujay.tic_chat.ui.fragment.TopicsFragment
 import com.zzhoujay.tic_chat.util.checkLogin
 import kotlinx.android.synthetic.main.activity_home.*
+import org.jetbrains.anko.startActivity
 
 /**
  * Created by zhou on 16-3-24.
@@ -25,6 +26,11 @@ class HomeActivity : BaseActivity() {
         const val start_flag = "start_flag"
 
         const val start_message = 0x233
+
+        const val option = "option"
+
+        const val option_goto_login = 1
+        const val option_exit_app = 2
     }
 
     val fragments: Array<Fragment> by lazy { arrayOf<Fragment>(TopicsFragment(), MessageFragment(), ProfileFragment()) }
@@ -63,6 +69,21 @@ class HomeActivity : BaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == requestCodeNewTopic && resultCode == RESULT_OK) {
             (fragments[0] as TopicsFragment).refresh()
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        if (intent?.hasExtra(option) ?: false) {
+            when (intent?.getIntExtra(option, 0)) {
+                option_goto_login -> {
+                    startActivity<LoginActivity>(LoginActivity.flag_login to true)
+                    finish()
+                }
+                option_exit_app -> {
+                    finish()
+                }
+            }
         }
     }
 }

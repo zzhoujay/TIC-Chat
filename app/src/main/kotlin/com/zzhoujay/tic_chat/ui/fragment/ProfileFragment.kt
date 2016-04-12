@@ -12,8 +12,11 @@ import com.bumptech.glide.Glide
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.data.Profile
 import com.zzhoujay.tic_chat.data.User
+import com.zzhoujay.tic_chat.ui.activity.AccountManagerActivity
 import com.zzhoujay.tic_chat.ui.activity.ProfileEditorActivity
 import com.zzhoujay.tic_chat.util.loading
+import com.zzhoujay.tic_chat.util.startActivity
+import com.zzhoujay.tic_chat.util.toast
 import kotlinx.android.synthetic.main.fragment_profile.*
 import org.jetbrains.anko.onClick
 import org.jetbrains.anko.startActivity
@@ -24,7 +27,7 @@ import kotlin.properties.Delegates
  */
 class ProfileFragment : BaseFragment() {
 
-    var useProfile: Profile by Delegates.notNull<Profile>()
+    var useProfile: Profile?=null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.fragment_profile, container, false)
@@ -34,7 +37,19 @@ class ProfileFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         profile.onClick {
-            context.startActivity<ProfileEditorActivity>(Profile.PROFILE to useProfile)
+            if(useProfile==null){
+                toast("正在加载账号信息中。。。")
+            }else{
+                startActivity<ProfileEditorActivity>(Profile.PROFILE to useProfile!!)
+            }
+        }
+
+        account_manager.onClick {
+            if(useProfile==null){
+                toast("正在加载账号信息中。。。")
+            }else{
+                startActivity<AccountManagerActivity>(Profile.PROFILE to useProfile!!)
+            }
         }
 
         swipeRefreshLayout.setOnRefreshListener { refreshUserProfile() }

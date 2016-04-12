@@ -10,6 +10,7 @@ import cn.bmob.v3.listener.FindListener
 import com.zzhoujay.tic_chat.ui.adapter.LoadMoreAdapter
 import com.zzhoujay.tic_chat.ui.adapter.NormalAdapter
 import com.zzhoujay.tic_chat.ui.adapter.holder.LoadMoreHolder
+import com.zzhoujay.tic_chat.util.ViewKit
 import com.zzhoujay.tic_chat.util.loading
 
 /**
@@ -72,6 +73,8 @@ abstract class ListFragment<T> : BaseFragment() {
 
         useSwipeRefreshLayout.setOnRefreshListener { refresh() }
         useRecyclerView.post { refresh() }
+
+        ViewKit.setSwipeRefreshLayoutColor(useSwipeRefreshLayout)
     }
 
     open fun refresh() {

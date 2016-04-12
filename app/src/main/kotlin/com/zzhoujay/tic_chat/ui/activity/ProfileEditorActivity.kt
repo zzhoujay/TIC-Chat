@@ -2,6 +2,8 @@ package com.zzhoujay.tic_chat.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.data.Profile
 import com.zzhoujay.tic_chat.ui.fragment.AvatarCropFragment
 import com.zzhoujay.tic_chat.ui.fragment.ProfileEditorFragment
@@ -23,15 +25,15 @@ class ProfileEditorActivity : ToolBarActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         swipeBack = true
         super.onCreate(savedInstanceState)
-        toolBarTranslate = true
+        toolBarBackgroundColor = ContextCompat.getColor(this, R.color.material_lightBlue_500)
         quickFinish = true
 
         fragment = ProfileEditorFragment()
         if (intent.hasExtra(Profile.PROFILE)) {
-            fragment.withArguments(Profile.PROFILE to intent.getSerializableExtra(Profile.PROFILE) as Profile)
+            fragment.withArguments(Profile.PROFILE to intent.getSerializableExtra(Profile.PROFILE) as Profile,
+                    ProfileEditorFragment.flag_editable to true)
         }
-
-        currFragment = fragment
+        currFragment = ProfileEditorFragment()
 
     }
 

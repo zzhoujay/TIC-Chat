@@ -15,7 +15,7 @@ class User(var profile: Profile) : BmobUser() {
 
 }
 
-class Profile(var name: String?=null, var email: String?=null, var age: Int?=null, var home: String?=null, var sex: Int?=null, var qq: String?=null, var college: String = "", var avatar: BmobFile? = null) : BmobObject() {
+class Profile(var name: String = "", var email: String = "", var age: Int = 0, var home: String = "", var sex: Int = 0, var qq: String = "", var college: String = "", var introduction: String = "", var avatar: BmobFile? = null) : BmobObject() {
     override fun toString(): String {
         return "Profile(name='$name', qq='$qq')"
     }

@@ -8,10 +8,14 @@ import android.text.TextWatcher
 import android.text.method.KeyListener
 import android.view.*
 import android.widget.EditText
+import cn.bmob.v3.BmobQuery
+import cn.bmob.v3.BmobUser
 import cn.bmob.v3.datatype.BmobFile
+import cn.bmob.v3.listener.GetListener
 import com.bumptech.glide.Glide
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.data.Profile
+import com.zzhoujay.tic_chat.data.User
 import com.zzhoujay.tic_chat.ui.activity.ProfileEditorActivity
 import com.zzhoujay.tic_chat.util.*
 import kotlinx.android.synthetic.main.fragment_profile_editor.*
@@ -22,49 +26,71 @@ import kotlin.properties.Delegates
 
 /**
  * Created by zhou on 16-4-9.
+ * Profile编辑界面
  */
 class ProfileEditorFragment : BaseFragment() {
 
     companion object {
-        const val status_before = 0
-        const val status_on = 1
-        const val status_after = 2
-        const val status_updating = 3
+        const val status_before = 0 // 点击编辑按钮之前
+        const val status_on = 1 // 点击了编辑按钮但还没开始编辑
+        const val status_after = 2 // 已经编辑了内容
+        const val status_updating = 3 // 编辑完成正在更新
+
+        const val flag_editable = "editable"
     }
 
+    // 各种editText
     var edits: Array<EditText> by Delegates.notNull<Array<EditText>>()
+    // editText的keyListener
     var keyListener: KeyListener? = null
+    // 使用的profile
     var useProfile: Profile by Delegates.notNull<Profile>()
-
+    // 当前编辑的状态
     var editStatus: Int = status_before
         set(value) {
-            if (value != field) {
-                if (value == status_before) {
-                    editActionMenu?.setIcon(R.drawable.ic_create_black_24dp)
-                } else if (value == status_after) {
-                    editActionMenu?.setIcon(R.drawable.ic_done_black_24dp)
-                } else {
-                    editActionMenu?.icon = null
+            editActionMenu?.setIcon(when (value) {
+                status_on -> {
+                    editTextEditable = true
+                    R.drawable.ic_clear_black_24dp
                 }
-                field = value
-            }
+                status_after -> {
+                    editTextEditable = true
+                    R.drawable.ic_done_black_24dp
+                }
+                status_updating -> {
+                    editTextEditable = false
+                    R.drawable.ic_cloud_upload_black_24dp
+                }
+                else -> {
+                    editTextEditable = false
+                    R.drawable.ic_create_black_24dp
+                }
+            })
+            field = value
         }
-
+    // 各种EditText是否可编辑
     var editTextEditable: Boolean = false
         set(value) {
             if (!value) {
                 keyListener = edits[0].keyListener
-                edits.forEach { it.keyListener = null }
+                edits.forEach {
+                    it.keyListener = null
+                    it.isFocusable = false
+                    ViewKit.hideSoftInput(it)
+                }
             } else {
                 if (keyListener != null)
-                    edits.forEach { it.keyListener = keyListener }
+                    edits.forEach {
+                        it.keyListener = keyListener
+                        it.isFocusableInTouchMode = true
+                    }
             }
             edit_age.isClickable = value
             edit_sex.isClickable = value
             avatar.isClickable = value
             field = value
         }
-
+    // 当前profile是否可编辑
     var editable: Boolean = false
         set(value) {
             editActionMenu?.isVisible = value
@@ -93,15 +119,23 @@ class ProfileEditorFragment : BaseFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        edits = arrayOf(edit_qq, edit_college, edit_email, edit_home, edit_name)
+        edits = arrayOf(edit_qq, edit_college, edit_email, edit_home, edit_name, edit_introduction)
 
-        edit_age.isClickable = false
-        edit_sex.isClickable = false
-        avatar.isClickable = false
-
-        if (arguments.containsKey(Profile.PROFILE)) {
+        if (try {
+            arguments.containsKey(Profile.PROFILE)
+        } catch(e: Exception) {
+            false
+        }) {
             useProfile = arguments.getSerializable(Profile.PROFILE) as Profile
             setUpProfile(useProfile)
+        } else {
+            refreshProfile()
+        }
+
+        editable = try {
+            arguments.getBoolean(flag_editable, false)
+        } catch(e: Exception) {
+            false
         }
 
         edits.forEach { it.addTextChangedListener(updateEnableWatch) }
@@ -109,55 +143,110 @@ class ProfileEditorFragment : BaseFragment() {
         edit_sex.onClick { selectSex() }
         edit_age.onClick { selectAge() }
 
-        avatar.onClick { selectIcon() }
+        avatar.onClick { selectAvatar() }
 
-        editable = true
+        swipeRefreshLayout.setOnRefreshListener { refreshProfile(useProfile) }
 
-        post { editTextEditable=false }
+        ViewKit.setSwipeRefreshLayoutColor(swipeRefreshLayout)
+
+        post { editStatus = status_before }
     }
 
+    /**
+     * 刷新profile
+     */
+    fun refreshProfile(profile: Profile? = null) {
+        loading(swipeRefreshLayout) {
+            if (profile == null) {
+                val query = BmobQuery<User>()
+                query.include("profile")
+                query.getObject(context, BmobUser.getObjectByKey(context, "objectId") as String, object : GetListener<User>() {
+                    override fun onSuccess(p0: User?) {
+                        isRefreshing = false
+                        if (p0 != null) {
+                            useProfile = p0.profile
+                            setUpProfile(useProfile)
+                            editable = true
+                        }
+                    }
+
+                    override fun onFailure(p0: Int, p1: String?) {
+                        isRefreshing = false
+                    }
+                })
+            } else {
+                val query = BmobQuery<Profile>()
+                query.getObject(context, profile.objectId, object : GetListener<Profile>() {
+                    override fun onSuccess(p0: Profile?) {
+                        isRefreshing = false
+                        if (p0 != null) {
+                            useProfile = p0
+                            setUpProfile(useProfile)
+                        }
+                    }
+
+                    override fun onFailure(p0: Int, p1: String?) {
+                        isRefreshing = false
+                    }
+                })
+            }
+        }
+    }
+
+    /**
+     * 设置profile
+     */
     fun setUpProfile(profile: Profile) {
         edit_qq.setText(profile.qq)
-        edit_name.setText(profile.name)
-        edit_age.text = "${profile.age}"
-        edit_home.setText(profile.home)
+        val name = profile.name
+        edit_name.setText(name)
+        val age = "${profile.age}"
+        edit_age.text = age
+        val home = profile.home
+        edit_home.setText(home)
         edit_college.setText(profile.college)
-        edit_sex.text = Profile.sex(profile.sex ?: 0)
+        val sex = Profile.sex(profile.sex)
+        edit_sex.text = sex
         edit_email.setText(profile.email)
+        edit_introduction.setText(profile.introduction)
+
+        simple_profile.text = "$sex $age $home"
+        simple_name.text = name
 
         Glide.with(this).load(profile.avatar?.getFileUrl(context)).into(avatar)
 
-        useProfile = profile
+        editStatus = status_before
     }
 
+    /**
+     * 更新profile
+     */
     fun updateProfile() {
-
-        val tempProfile = Profile()
-        tempProfile.email = edit_email.text.toString()
-        tempProfile.qq = edit_qq.text.toString()
-        tempProfile.age = edit_age.text.toString().toInt()
-        tempProfile.home = edit_home.text.toString()
-        tempProfile.college = edit_college.text.toString()
-        tempProfile.name = edit_name.text.toString()
-        tempProfile.avatar = selectIcon
-        tempProfile.objectId = useProfile.objectId
+        useProfile.setValue("email", edit_email.text.toString())
+        useProfile.setValue("qq", edit_qq.text.toString())
+        useProfile.setValue("age", edit_age.text.toString().toInt())
+        useProfile.setValue("home", edit_home.text.toString())
+        useProfile.setValue("college", edit_college.text.toString())
+        useProfile.setValue("name", edit_name.text.toString())
+        useProfile.setValue("introduction", edit_introduction.text.toString())
+        if (selectIcon != null)
+            useProfile.setValue("avatar", selectIcon)
 
         progress(false, "正在更新资料") {
-            tempProfile.update(context, useProfile.objectId, SimpleUpdateListener({ code, msg ->
+            useProfile.update(context, SimpleUpdateListener({ code, msg ->
                 dismiss()
-                var profile: Profile =
-                        if (code != 0) {
-                            toast("code:$code,msg:$msg")
-                            useProfile
-                        } else {
-                            tempProfile
-                        }
-                setUpProfile(profile)
-                editStatus=status_before
+                if (code != 0) {
+                    toast("更新资料失败")
+                }
+                editStatus = status_before
+                refreshProfile(useProfile)
             }))
         }
     }
 
+    /**
+     * 更新头像
+     */
     fun updateAvatar(avatarUri: Uri) {
         if (editStatus == status_on || editStatus == status_after) {
             val tempFile = BmobFile(File(avatarUri.path))
@@ -177,6 +266,9 @@ class ProfileEditorFragment : BaseFragment() {
         }
     }
 
+    /**
+     * 选择性别
+     */
     fun selectSex() {
         context.alert {
             title("请选择性别")
@@ -192,6 +284,9 @@ class ProfileEditorFragment : BaseFragment() {
         }.show()
     }
 
+    /**
+     * 选择年龄
+     */
     fun selectAge() {
         context.alert {
             title("请选择年龄")
@@ -203,7 +298,10 @@ class ProfileEditorFragment : BaseFragment() {
         }.show()
     }
 
-    fun selectIcon() {
+    /**
+     * 选择头像
+     */
+    fun selectAvatar() {
         val i = Intent(Intent.ACTION_GET_CONTENT)
         i.type = "image/*"
         activity.startActivityForResult(i, ProfileEditorActivity.REQUEST_CODE_PICK_AVATAR);
@@ -219,13 +317,14 @@ class ProfileEditorFragment : BaseFragment() {
         if (item?.itemId == R.id.action_profile_editor && editable) {
             when (editStatus) {
                 status_before -> {
-                    editTextEditable = true
                     editStatus = status_on
                 }
                 status_after -> {
                     updateProfile()
                     editStatus = status_updating
-                    editTextEditable = false
+                }
+                status_on -> {
+                    editStatus = status_before
                 }
             }
         }
@@ -234,13 +333,7 @@ class ProfileEditorFragment : BaseFragment() {
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
         super.onPrepareOptionsMenu(menu)
-        editActionMenu?.isVisible = editable
-        if (editStatus == status_before) {
-            editActionMenu?.setIcon(R.drawable.ic_create_black_24dp)
-        } else if (editStatus == status_after) {
-            editActionMenu?.setIcon(R.drawable.ic_done_black_24dp)
-        } else {
-            editActionMenu?.icon = null
-        }
+        editable = editable
+        editStatus = editStatus
     }
 }

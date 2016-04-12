@@ -29,7 +29,6 @@ open class ToolBarActivity : BaseActivity() {
             field = value
         }
     private var containerMarginTop: Int = 0
-    private var toolBarBackground: Int = 0
     var toolBarTranslate: Boolean = false
         set(value) {
             val lp = container.layoutParams as CoordinatorLayout.LayoutParams
@@ -41,6 +40,11 @@ open class ToolBarActivity : BaseActivity() {
                 if (containerMarginTop != 0)
                     lp.topMargin = containerMarginTop
             }
+        }
+    var toolBarBackgroundColor: Int
+        get() = toolBar.backgroundColor
+        set(value) {
+            toolBar.backgroundColor = value
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {

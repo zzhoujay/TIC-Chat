@@ -109,6 +109,7 @@ class LoginFragment : BaseFragment() {
                                         dismiss()
                                         if (code == 0) {
                                             startActivity<HomeActivity>()
+                                            finish()
                                         } else {
                                             toast("code:$code,msg:$msg")
                                         }

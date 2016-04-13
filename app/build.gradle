@@ -27,6 +27,7 @@ android {
         additionalParameters "--no-version-vectors"
     }
 
+    useLibrary 'org.apache.http.legacy'
 }
 
 dependencies {

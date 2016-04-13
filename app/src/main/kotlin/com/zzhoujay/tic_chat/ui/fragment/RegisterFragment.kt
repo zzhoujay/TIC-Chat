@@ -121,6 +121,7 @@ class RegisterFragment : BaseFragment() {
                     if (code == 0) {
                         toast(R.string.toast_register_success)
                         startActivity<HomeActivity>()
+                        finish()
                     } else {
                         toast("code:$code,msg:$msg")
                     }

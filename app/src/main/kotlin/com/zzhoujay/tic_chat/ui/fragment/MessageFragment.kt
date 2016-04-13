@@ -74,28 +74,7 @@ class MessageFragment : ListFragment<Message>() {
         }
         m
     }
-    override val refreshQuery: BmobQuery<Message> by lazy {
-        val query = BmobQuery<Message>()
-        val user=BmobUser.getCurrentUser(context,User::class.java)
-        query.addWhereNotEqualTo("fromUser",user)
-        query.addWhereEqualTo("targetUser", user)
-        query.order("-createdAt")
-        query.include("fromUser.profile,targetTopic,targetReply")
-        query.setLimit(refreshQuerySize)
-        query
-    }
-    override val loadMoreQuery: BmobQuery<Message> by lazy {
-        val query = BmobQuery<Message>()
-        val user=BmobUser.getCurrentUser(context,User::class.java)
-        query.addWhereNotEqualTo("fromUser",user)
-        query.addWhereEqualTo("targetUser", user)
-        query.order("-createdAt")
-        query.include("fromUser.profile,targetTopic,targetReply")
-        val size = Configuration.Page.default_size
-        query.setLimit(size)
-        query.setSkip(dataAdapter.itemCount)
-        query
-    }
+
     override val refreshQuerySize: Int = Configuration.Page.default_size
     override val loadMoreQuerySize: Int = Configuration.Page.default_size
 
@@ -109,6 +88,19 @@ class MessageFragment : ListFragment<Message>() {
         useSwipeRefreshLayout = swipeRefreshLayout
         layoutManager = LinearLayoutManager(context)
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun createQuery(refresh: Boolean): BmobQuery<Message> {
+        val query = BmobQuery<Message>()
+        val user = BmobUser.getCurrentUser(context, User::class.java)
+        query.addWhereNotEqualTo("fromUser", user)
+        query.addWhereEqualTo("targetUser", user)
+        query.order("-createdAt")
+        query.include("fromUser.profile,targetTopic,targetReply")
+        query.setLimit(if (refresh) refreshQuerySize else loadMoreQuerySize)
+        if (!refresh)
+            query.setSkip(dataAdapter.itemCount)
+        return query
     }
 
 }

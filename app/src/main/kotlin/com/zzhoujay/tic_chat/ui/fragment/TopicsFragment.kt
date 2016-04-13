@@ -13,6 +13,7 @@ import cn.bmob.v3.BmobQuery
 import cn.bmob.v3.listener.FindListener
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.common.Configuration
+import com.zzhoujay.tic_chat.data.Category
 import com.zzhoujay.tic_chat.data.Topic
 import com.zzhoujay.tic_chat.ui.activity.HomeActivity
 import com.zzhoujay.tic_chat.ui.activity.NewTopicActivity
@@ -23,7 +24,9 @@ import com.zzhoujay.tic_chat.ui.adapter.SpinnerAdapter
 import com.zzhoujay.tic_chat.ui.adapter.TopicAdapter
 import com.zzhoujay.tic_chat.ui.adapter.holder.LoadMoreHolder
 import com.zzhoujay.tic_chat.util.loading
+import com.zzhoujay.tic_chat.util.toast
 import kotlinx.android.synthetic.main.fragment_topics.*
+import org.jetbrains.anko.alert
 import org.jetbrains.anko.onClick
 import org.jetbrains.anko.startActivity
 import kotlin.properties.Delegates
@@ -32,6 +35,8 @@ import kotlin.properties.Delegates
  * Created by zhou on 16-3-24.
  */
 class TopicsFragment : ListFragment<Topic>() {
+
+
     override val refresh: FindListener<Topic> by lazy {
         object : FindListener<Topic>() {
             override fun onSuccess(p0: MutableList<Topic>?) {
@@ -61,7 +66,10 @@ class TopicsFragment : ListFragment<Topic>() {
     override var useSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull<SwipeRefreshLayout>()
 
     override val wrapperAdapter: SpinnerAdapter by lazy {
-        val s = SpinnerAdapter(dataAdapter)
+        val s = SpinnerAdapter(context, dataAdapter)
+        s.onItemSelectedListener = {
+            refresh(false)
+        }
         s.onStatusChangeListener = {
             if (it == LoadMoreHolder.State.loading) {
                 loadMore()
@@ -77,21 +85,7 @@ class TopicsFragment : ListFragment<Topic>() {
         a.realPosition = { it - wrapperAdapter.headerCount() }
         a
     }
-    override val refreshQuery: BmobQuery<Topic> by lazy {
-        val query = BmobQuery<Topic>()
-        query.setLimit(refreshQuerySize)
-        query.order("-updatedAt")
-        query.include("author.profile")
-        query
-    }
-    override val loadMoreQuery: BmobQuery<Topic> by lazy {
-        val query = BmobQuery<Topic>()
-        query.setSkip(dataAdapter.itemCount)
-        query.setLimit(loadMoreQuerySize)
-        query.order("-updatedAt")
-        query.include("author.profile")
-        query
-    }
+
     override val refreshQuerySize: Int = Configuration.Page.default_size
     override val loadMoreQuerySize: Int = Configuration.Page.default_size
 
@@ -108,6 +102,49 @@ class TopicsFragment : ListFragment<Topic>() {
         new_topic.onClick {
             activity.startActivityForResult(Intent(context, NewTopicActivity::class.java), HomeActivity.requestCodeNewTopic)
         }
+
+        post { refreshCategory() }
+    }
+
+    fun createQuery(refresh: Boolean = false, category: Category? = null): BmobQuery<Topic> {
+        val query = BmobQuery<Topic>()
+        if (!refresh)
+            query.setSkip(dataAdapter.itemCount)
+        query.setLimit(loadMoreQuerySize)
+        query.order("-updatedAt")
+        if (category != null && !category.equals(wrapperAdapter.allCategory)) {
+            query.addWhereEqualTo("category", category)
+        }
+        query.include("author.profile")
+        return query
+    }
+
+    fun refreshCategory() {
+        loading(useSwipeRefreshLayout) {
+            val query = BmobQuery<Category>()
+            query.order("index")
+            query.findObjects(context, object : FindListener<Category>() {
+                override fun onError(p0: Int, p1: String?) {
+                    isRefreshing = false
+                    activity.alert {
+                        title("提示")
+                        message("数据加载失败，请重试")
+                        positiveButton("重试") { refreshCategory() }
+                        negativeButton("退出") { activity.finish() }
+                    }.show()
+                }
+
+                override fun onSuccess(p0: MutableList<Category>?) {
+                    isRefreshing = false
+                    wrapperAdapter.setCategorys(p0)
+                    refresh()
+                }
+            })
+        }
+    }
+
+    override fun createQuery(refresh: Boolean): BmobQuery<Topic> {
+        return createQuery(refresh,wrapperAdapter.getCurrCategory())
     }
 
 }

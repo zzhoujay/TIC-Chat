@@ -3,6 +3,7 @@ package com.zzhoujay.tic_chat.util
 import android.util.Log
 import cn.bmob.v3.BmobInstallation
 import cn.bmob.v3.BmobPushManager
+import cn.bmob.v3.BmobUser
 import cn.bmob.v3.listener.SaveListener
 import cn.bmob.v3.listener.UpdateListener
 import cn.bmob.v3.listener.UploadFileListener
@@ -58,9 +59,12 @@ open class SimpleUploadFileListener(val t: (code: Int, msg: String?) -> Unit) : 
 
 object BmobKit {
 
-    fun pushToUser(user: User, alert: Alert) {
+    fun pushToUser(targetUser: User, alert: Alert) {
+        if (BmobUser.getCurrentUser(App.app, User::class.java).equals(targetUser)) {
+            return
+        }
         val query = BmobInstallation.getQuery<Installation>()
-        query.addWhereEqualTo("user", user)
+        query.addWhereEqualTo("user", targetUser)
         val push = BmobPushManager<Installation>(App.app)
         push.query = query
         push.pushMessage(alert.toJson())

@@ -12,7 +12,16 @@ import org.json.JSONObject
  */
 
 class User(var profile: Profile) : BmobUser() {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is User) return false
 
+        return objectId.equals(other.objectId)
+    }
+
+    override fun hashCode(): Int {
+        return objectId.hashCode()
+    }
 }
 
 class Profile(var name: String = "", var email: String = "", var age: Int = 0, var home: String = "", var sex: Int = 0, var qq: String = "", var college: String = "", var introduction: String = "", var avatar: BmobFile? = null) : BmobObject() {
@@ -73,6 +82,8 @@ class Message(val type: Int = Message.type_reply_topic, var fromUser: User, var 
         const val type_quote_reply = 0x2345
     }
 }
+
+class Feedback(val fromUser: User, val message: String) : BmobObject()
 
 data class Alert(val type: Int, val id: String) {
 

@@ -22,15 +22,19 @@ class HomeActivity : BaseActivity() {
 
     companion object {
         const val requestCodeNewTopic = 0x12
+        const val requestCodeEditorProfile = 0x13
 
         const val start_flag = "start_flag"
 
-        const val start_message = 0x233
+        const val start_topic = 0
+        const val start_message = 1
+        const val start_profile = 2
 
         const val option = "option"
 
         const val option_goto_login = 1
         const val option_exit_app = 2
+
     }
 
     val fragments: Array<Fragment> by lazy { arrayOf<Fragment>(TopicsFragment(), MessageFragment(), ProfileFragment()) }
@@ -63,12 +67,16 @@ class HomeActivity : BaseActivity() {
 
         viewPager.adapter = adapter
         tabLayout.setupWithViewPager(viewPager)
+
+        viewPager.currentItem = intent.getIntExtra(start_flag, 0)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == requestCodeNewTopic && resultCode == RESULT_OK) {
             (fragments[0] as TopicsFragment).refresh()
+        } else if (requestCode == requestCodeEditorProfile && resultCode == RESULT_OK) {
+            (fragments[2] as ProfileFragment).refreshUserProfile()
         }
     }
 
@@ -84,6 +92,8 @@ class HomeActivity : BaseActivity() {
                     finish()
                 }
             }
+        } else if (intent?.hasExtra(start_flag) ?: false) {
+            viewPager.currentItem = intent?.getIntExtra(start_flag, 0) ?: 0
         }
     }
 }

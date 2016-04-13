@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
 
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/start"
-        android:layout_gravity="center"
+    <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start" />
+        android:layout_gravity="center"
+        android:text="TIC"
+        android:id="@+id/start"
+        android:textScaleX="1.2"
+        android:textSize="60sp"
+        android:textColor="@android:color/white" />
 
 </FrameLayout>

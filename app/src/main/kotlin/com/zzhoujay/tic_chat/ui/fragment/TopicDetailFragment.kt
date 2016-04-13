@@ -31,6 +31,7 @@ import kotlin.properties.Delegates
  */
 class TopicDetailFragment : ListFragment<Reply>() {
 
+
     override val refresh: FindListener<Reply> by lazy {
         object : FindListener<Reply>() {
             override fun onSuccess(p0: MutableList<Reply>?) {
@@ -73,23 +74,6 @@ class TopicDetailFragment : ListFragment<Reply>() {
         }
         r
     }
-    override val refreshQuery: BmobQuery<Reply> by lazy {
-        val query = BmobQuery<Reply>()
-        query.setLimit(refreshQuerySize)
-        query.order("-createdAt")
-        query.include("author.profile")
-        query.addWhereEqualTo("topic", BmobPointer(wrapperAdapter.topic))
-        query
-    }
-    override val loadMoreQuery: BmobQuery<Reply> by lazy {
-        val query = BmobQuery<Reply>()
-        query.setLimit(loadMoreQuerySize)
-        query.setSkip(dataAdapter.itemCount)
-        query.include("author.profile")
-        query.order("-createdAt")
-        query.addWhereEqualTo("topic", BmobPointer(wrapperAdapter.topic))
-        query
-    }
     override val refreshQuerySize: Int = Configuration.Page.default_size
     override val loadMoreQuerySize: Int = Configuration.Page.default_size
 
@@ -107,11 +91,12 @@ class TopicDetailFragment : ListFragment<Reply>() {
         useRecyclerView = recyclerView
         useSwipeRefreshLayout = swipeRefreshLayout
         layoutManager = LinearLayoutManager(context)
+
+
         super.onViewCreated(view, savedInstanceState)
 
         if (arguments.containsKey(Topic.TOPIC)) {
             wrapperAdapter.topic = arguments.getSerializable(Topic.TOPIC) as Topic
-            useRecyclerView.post { refreshTopic() }
         }
 
         replyContent.addTextChangedListener(object : SimpleTextWatcher() {
@@ -122,6 +107,9 @@ class TopicDetailFragment : ListFragment<Reply>() {
 
         sendReply.onClick { sendReply() }
 
+        post {
+            refreshTopic()
+        }
     }
 
     fun sendReply() {
@@ -132,13 +120,15 @@ class TopicDetailFragment : ListFragment<Reply>() {
                 if (code == 0) {
                     val topic = wrapperAdapter.topic
                     val targetUser = topic!!.author
-                    val message = Message(Message.type_reply_topic, BmobUser.getCurrentUser(context, User::class.java), targetUser, topic, reply)
-                    message.save(context, SimpleSaveListener() { code, msg ->
-                        if (code == 0) {
-                            Log.i("send", "id:${message.objectId}")
-                            BmobKit.pushToUser(targetUser, Alert(Alert.type_message, message.objectId))
-                        }
-                    })
+                    if (!targetUser.equals(BmobUser.getCurrentUser(context, User::class.java))) {
+                        val message = Message(Message.type_reply_topic, BmobUser.getCurrentUser(context, User::class.java), targetUser, topic, reply)
+                        message.save(context, SimpleSaveListener() { code, msg ->
+                            if (code == 0) {
+                                Log.i("send", "id:${message.objectId}")
+                                BmobKit.pushToUser(targetUser, Alert(Alert.type_message, message.objectId))
+                            }
+                        })
+                    }
                     replyContent.text.clear()
                     toast(R.string.toast_reply_success)
                     refresh()
@@ -167,8 +157,21 @@ class TopicDetailFragment : ListFragment<Reply>() {
         }
     }
 
-    override fun refresh() {
+    override fun refresh(useCache: Boolean) {
         refreshTopic()
-        super.refresh()
+        super.refresh(useCache)
     }
+
+    override fun createQuery(refresh: Boolean): BmobQuery<Reply> {
+        val query = BmobQuery<Reply>()
+        query.setLimit(if (refresh) refreshQuerySize else loadMoreQuerySize)
+        if (!refresh)
+            query.setSkip(dataAdapter.itemCount)
+        query.include("author.profile")
+        query.order("-createdAt")
+        query.addWhereEqualTo("topic", wrapperAdapter.topic)
+        return query
+    }
+
+
 }

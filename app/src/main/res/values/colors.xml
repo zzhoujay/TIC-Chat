@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/material_purple_500</color>
-    <color name="colorPrimaryDark">@color/material_purple_600</color>
+    <color name="colorPrimary">@color/material_lightBlue_500</color>
+    <color name="colorPrimaryDark">@color/material_lightBlue_600</color>
     <color name="colorAccent">@color/material_pink_500</color>
 
     <color name="colorAccent1">@color/material_pink_600</color>

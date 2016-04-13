@@ -1,5 +1,6 @@
 package com.zzhoujay.tic_chat.ui.fragment
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -121,6 +122,8 @@ class ProfileEditorFragment : BaseFragment() {
 
         edits = arrayOf(edit_qq, edit_college, edit_email, edit_home, edit_name, edit_introduction)
 
+        swipeRefreshLayout.isRefreshing = true
+
         if (try {
             arguments.containsKey(Profile.PROFILE)
         } catch(e: Exception) {
@@ -216,6 +219,7 @@ class ProfileEditorFragment : BaseFragment() {
         Glide.with(this).load(profile.avatar?.getFileUrl(context)).into(avatar)
 
         editStatus = status_before
+        swipeRefreshLayout.isRefreshing = false
     }
 
     /**
@@ -237,6 +241,8 @@ class ProfileEditorFragment : BaseFragment() {
                 dismiss()
                 if (code != 0) {
                     toast("更新资料失败")
+                } else {
+                    activity.setResult(Activity.RESULT_OK)
                 }
                 editStatus = status_before
                 refreshProfile(useProfile)

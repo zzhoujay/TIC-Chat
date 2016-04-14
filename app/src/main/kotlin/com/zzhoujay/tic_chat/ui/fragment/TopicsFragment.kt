@@ -80,7 +80,9 @@ class TopicsFragment : ListFragment<Topic>() {
     override val dataAdapter: TopicAdapter by lazy {
         val a = TopicAdapter()
         a.onItemClickListener = {
-            context.startActivity<TopicDetailActivity>(Topic.TOPIC to it)
+            val intent = Intent(context, TopicDetailActivity::class.java)
+            intent.putExtra(Topic.TOPIC, it)
+            activity.startActivityForResult(intent, HomeActivity.requestCodeTopicDetail)
         }
         a.realPosition = { it - wrapperAdapter.headerCount() }
         a
@@ -112,6 +114,7 @@ class TopicsFragment : ListFragment<Topic>() {
             query.setSkip(dataAdapter.itemCount)
         query.setLimit(loadMoreQuerySize)
         query.order("-updatedAt")
+        query.addWhereEqualTo("state",Topic.state_normal)
         if (category != null && !category.equals(wrapperAdapter.allCategory)) {
             query.addWhereEqualTo("category", category)
         }
@@ -144,7 +147,7 @@ class TopicsFragment : ListFragment<Topic>() {
     }
 
     override fun createQuery(refresh: Boolean): BmobQuery<Topic> {
-        return createQuery(refresh,wrapperAdapter.getCurrCategory())
+        return createQuery(refresh, wrapperAdapter.getCurrCategory())
     }
 
 }

@@ -3,6 +3,7 @@ package com.zzhoujay.tic_chat.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.util.Log
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.data.Profile
 import com.zzhoujay.tic_chat.ui.fragment.AvatarCropFragment
@@ -33,7 +34,7 @@ class ProfileEditorActivity : ToolBarActivity() {
             fragment.withArguments(Profile.PROFILE to intent.getSerializableExtra(Profile.PROFILE) as Profile,
                     ProfileEditorFragment.flag_editable to true)
         }
-        currFragment = ProfileEditorFragment()
+        currFragment = fragment
 
     }
 

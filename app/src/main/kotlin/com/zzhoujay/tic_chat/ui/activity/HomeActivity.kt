@@ -23,6 +23,7 @@ class HomeActivity : BaseActivity() {
     companion object {
         const val requestCodeNewTopic = 0x12
         const val requestCodeEditorProfile = 0x13
+        const val requestCodeTopicDetail = 0x14
 
         const val start_flag = "start_flag"
 
@@ -73,7 +74,7 @@ class HomeActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == requestCodeNewTopic && resultCode == RESULT_OK) {
+        if ((requestCode == requestCodeNewTopic || requestCode == requestCodeTopicDetail) && resultCode == RESULT_OK) {
             (fragments[0] as TopicsFragment).refresh()
         } else if (requestCode == requestCodeEditorProfile && resultCode == RESULT_OK) {
             (fragments[2] as ProfileFragment).refreshUserProfile()
@@ -93,7 +94,11 @@ class HomeActivity : BaseActivity() {
                 }
             }
         } else if (intent?.hasExtra(start_flag) ?: false) {
-            viewPager.currentItem = intent?.getIntExtra(start_flag, 0) ?: 0
+            val index = intent?.getIntExtra(start_flag, 0) ?: 0
+            viewPager.currentItem = index
+            if (index == start_message) {
+                (fragments[1] as MessageFragment).refresh()
+            }
         }
     }
 }

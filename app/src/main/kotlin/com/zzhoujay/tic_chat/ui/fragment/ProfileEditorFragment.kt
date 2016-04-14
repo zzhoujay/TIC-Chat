@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextWatcher
 import android.text.method.KeyListener
 import android.view.*
 import android.widget.EditText
@@ -73,7 +72,8 @@ class ProfileEditorFragment : BaseFragment() {
     var editTextEditable: Boolean = false
         set(value) {
             if (!value) {
-                keyListener = edits[0].keyListener
+                if (keyListener == null)
+                    keyListener = edits[0].keyListener
                 edits.forEach {
                     it.keyListener = null
                     it.isFocusable = false
@@ -97,11 +97,13 @@ class ProfileEditorFragment : BaseFragment() {
             editActionMenu?.isVisible = value
             field = value
         }
-    val updateEnableWatch: TextWatcher by lazy {
+    val updateEnableWatch: SimpleTextWatcher by lazy {
         object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable?) {
                 super.afterTextChanged(s)
-                editStatus = status_after
+                if (editStatus == status_on) {
+                    editStatus = status_after
+                }
             }
         }
     }
@@ -152,7 +154,9 @@ class ProfileEditorFragment : BaseFragment() {
 
         ViewKit.setSwipeRefreshLayoutColor(swipeRefreshLayout)
 
-        post { editStatus = status_before }
+        post {
+            editStatus = status_before
+        }
     }
 
     /**
@@ -258,13 +262,12 @@ class ProfileEditorFragment : BaseFragment() {
             val tempFile = BmobFile(File(avatarUri.path))
             progress(false, "正在上传头像") {
                 tempFile.uploadblock(context, SimpleUploadFileListener({ code, msg ->
+                    dismiss()
                     if (code == 0) {
-                        dismiss()
                         selectIcon = tempFile
                         Glide.with(this@ProfileEditorFragment).load(avatarUri).into(avatar)
                         editStatus = status_after
                     } else {
-                        dismiss()
                         toast("头像上传失败")
                     }
                 }))
@@ -284,7 +287,7 @@ class ProfileEditorFragment : BaseFragment() {
                     1 -> -1
                     else -> 0
                 }
-                edit_sex.text = Profile.sex(useProfile.sex ?: 0)
+                edit_sex.text = Profile.sex(useProfile.sex)
                 editStatus = status_after
             }
         }.show()

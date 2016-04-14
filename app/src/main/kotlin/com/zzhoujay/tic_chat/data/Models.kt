@@ -46,14 +46,17 @@ class Category(var name: String = "", var index: Int = 0) : BmobObject() {
     override fun toString(): String = name
 }
 
-class Topic(var title: String = "", var content: String = "", var reply: Int = 0, var author: User, var category: Category) : BmobObject() {
+class Topic(var title: String = "", var content: String = "", var reply: Int = 0, var author: User, var category: Category,var state:Int=Topic.state_normal) : BmobObject() {
     override fun toString(): String {
-        return "Topic(title='$title', content='$content', reply=$reply, author=$author, category=$category)"
+        return "Topic(title='$title', content='$content', reply=$reply, author=$author, category=$category, state=$state)"
     }
 
     companion object {
         const val TOPIC = "topic"
         const val TOPIC_LIST = "topic_list"
+
+        const val state_normal = 0
+        const val state_deleted = 1
     }
 
 }

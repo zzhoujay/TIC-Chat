@@ -1,5 +1,6 @@
 package com.zzhoujay.tic_chat.ui.fragment
 
+import android.app.Activity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
@@ -23,7 +24,9 @@ import com.zzhoujay.tic_chat.ui.adapter.TopicDetailAdapter
 import com.zzhoujay.tic_chat.ui.adapter.holder.LoadMoreHolder
 import com.zzhoujay.tic_chat.util.*
 import kotlinx.android.synthetic.main.fragment_topic_detail.*
+import org.jetbrains.anko.async
 import org.jetbrains.anko.onClick
+import java.util.*
 import kotlin.properties.Delegates
 
 /**
@@ -63,13 +66,15 @@ class TopicDetailFragment : ListFragment<Reply>() {
     override val wrapperAdapter: TopicDetailAdapter by lazy {
         val t = TopicDetailAdapter(dataAdapter)
         t.onStatusChangeListener = { if (it == LoadMoreHolder.State.loading) loadMore() }
+        t.deleteActionCallback = { deleteCurrTopic() }
         t
     }
     override val dataAdapter: ReplyAdapter by lazy {
         val r = ReplyAdapter()
         r.realPosition = { it - wrapperAdapter.headerCount() }
         r.onItemLongClickListener = {
-            val replyAt = TextKit.generateColorTextReply("@${it.author.profile?.name}", ContextCompat.getColor(context, R.color.material_lightBlue_500))
+            atUserSet.add(it.author)
+            val replyAt = TextKit.generateColorTextReply("@${it.author.profile.name}", ContextCompat.getColor(context, R.color.material_lightBlue_500))
             replyContent.text.append(" ").append(replyAt).append(" ")
         }
         r
@@ -82,6 +87,8 @@ class TopicDetailFragment : ListFragment<Reply>() {
         set(value) {
             sendReply.isEnabled = value
         }
+
+    val atUserSet: HashSet<User> by lazy { HashSet<User>() }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.fragment_topic_detail, container, false)
@@ -114,26 +121,40 @@ class TopicDetailFragment : ListFragment<Reply>() {
 
     fun sendReply() {
         progress(false, getString(R.string.alert_send_reply)) {
-            val reply = Reply(replyContent.text.toString(), null, BmobUser.getCurrentUser(context, User::class.java), wrapperAdapter.topic!!)
+            val rc = replyContent.text.toString()
+            val reply = Reply(rc, null, BmobUser.getCurrentUser(context, User::class.java), wrapperAdapter.topic!!)
             reply.save(context, SimpleSaveListener({ code, msg ->
                 dismiss()
                 if (code == 0) {
                     val topic = wrapperAdapter.topic
                     val targetUser = topic!!.author
-                    if (!targetUser.equals(BmobUser.getCurrentUser(context, User::class.java))) {
-                        val message = Message(Message.type_reply_topic, BmobUser.getCurrentUser(context, User::class.java), targetUser, topic, reply)
+                    val fromUser = BmobUser.getCurrentUser(context, User::class.java)
+                    if (!targetUser.equals(fromUser)) {
+                        val message = Message(Message.type_reply_topic, fromUser, targetUser, topic, reply)
                         message.save(context, SimpleSaveListener() { code, msg ->
                             if (code == 0) {
-                                Log.i("send", "id:${message.objectId}")
                                 BmobKit.pushToUser(targetUser, Alert(Alert.type_message, message.objectId))
                             }
                         })
                     }
+                    async() {
+                        for (user in atUserSet) {
+                            if (!user.equals(fromUser) && isUserHasAt(user, rc)) {
+                                val message = Message(Message.type_quote_reply, fromUser, user, topic, reply)
+                                message.save(context, SimpleSaveListener() { code, msg ->
+                                    if (code == 0) {
+                                        BmobKit.pushToUser(user, Alert(Alert.type_message, message.objectId))
+                                    }
+                                })
+                            }
+                        }
+                    }
                     replyContent.text.clear()
+                    atUserSet.clear()
                     toast(R.string.toast_reply_success)
                     refresh()
                 } else {
-                    Log.i("onError", "code:$code,msg:$msg")
+                    toast("发送失败")
                 }
             }))
         }
@@ -171,6 +192,26 @@ class TopicDetailFragment : ListFragment<Reply>() {
         query.order("-createdAt")
         query.addWhereEqualTo("topic", wrapperAdapter.topic)
         return query
+    }
+
+    private fun isUserHasAt(user: User, text: String): Boolean {
+        return text.contains(" @${user.profile.name} ")
+    }
+
+    private fun deleteCurrTopic() {
+        progress(false, "正在删除中") {
+            val topic = wrapperAdapter.topic!!
+            topic.setValue("state", Topic.state_deleted)
+            topic.update(context, SimpleUpdateListener({ code, msg ->
+                dismiss()
+                if (code == 0) {
+                    activity.setResult(Activity.RESULT_OK)
+                    finish()
+                } else {
+                    toast("删除失败,code:$code,msg:$msg")
+                }
+            }))
+        }
     }
 
 

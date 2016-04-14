@@ -2,10 +2,14 @@ package com.zzhoujay.tic_chat.ui.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import cn.bmob.v3.BmobUser
 import com.bumptech.glide.Glide
+import com.zzhoujay.tic_chat.App
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.data.Topic
+import com.zzhoujay.tic_chat.data.User
 import com.zzhoujay.tic_chat.ui.adapter.holder.TopicDetailHolder
 import kotlin.properties.Delegates
 
@@ -20,6 +24,8 @@ class TopicDetailAdapter : LoadMoreAdapter {
             notifyItemChanged(0)
         }
 
+    var deleteActionCallback: (() -> Unit)? = null
+
     constructor(childAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>) : super(childAdapter) {
     }
 
@@ -33,6 +39,11 @@ class TopicDetailAdapter : LoadMoreAdapter {
             holder.time.text = topic?.updatedAt
             val profile = topic?.author?.profile
             holder.name.text = profile?.name
+            holder.deleteAction.visibility = if (BmobUser.getCurrentUser(App.app, User::class.java).equals(topic?.author)) {
+                View.VISIBLE
+            } else {
+                View.INVISIBLE
+            }
             Glide.with(holder.icon.context).load(profile?.avatar?.getFileUrl(holder.icon.context)).into(holder.icon)
         }
     }
@@ -45,6 +56,9 @@ class TopicDetailAdapter : LoadMoreAdapter {
 
     override fun onHeaderCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
         val holder = TopicDetailHolder(LayoutInflater.from(parent!!.context).inflate(R.layout.item_topic_header, parent, false))
+        holder.onClickListener = {
+            deleteActionCallback?.invoke()
+        }
         return holder
     }
 

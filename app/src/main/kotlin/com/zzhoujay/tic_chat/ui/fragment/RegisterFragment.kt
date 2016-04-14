@@ -105,27 +105,37 @@ class RegisterFragment : BaseFragment() {
 
         registerAction.onClick {
 
-            progress(false,getString(R.string.alert_register)) {
+            progress(false, getString(R.string.alert_register)) {
 
                 val ac = account.editText!!.text.toString()
                 val pd = password.editText!!.text.toString()
                 val em = email.editText!!.text.toString()
 
-                val user = User(Profile(ac,em))
-                user.username = ac
-                user.setPassword(pd)
-                user.email = em
+                val profile = Profile(ac, em)
 
-                user.signUp(context, SimpleSaveListener({ code, msg ->
-                    dismiss()
+
+                profile.save(context, SimpleSaveListener({ code, msg ->
                     if (code == 0) {
-                        toast(R.string.toast_register_success)
-                        startActivity<HomeActivity>()
-                        finish()
+                        val user = User(profile )
+                        user.username = ac
+                        user.setPassword(pd)
+                        user.email = em
+                        user.signUp(context, SimpleSaveListener({ code, msg ->
+                            dismiss()
+                            if (code == 0) {
+                                toast(R.string.toast_register_success)
+                                startActivity<HomeActivity>()
+                                finish()
+                            } else {
+                                toast("code:$code,msg:$msg")
+                            }
+                        }))
                     } else {
-                        toast("code:$code,msg:$msg")
+                        dismiss()
+                        toast("注册失败")
                     }
                 }))
+
             }
 
         }

@@ -25,6 +25,7 @@ class TopicDetailAdapter : LoadMoreAdapter {
         }
 
     var deleteActionCallback: (() -> Unit)? = null
+    var iconClickListener:(()->Unit)?=null
 
     constructor(childAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>) : super(childAdapter) {
     }
@@ -58,6 +59,9 @@ class TopicDetailAdapter : LoadMoreAdapter {
         val holder = TopicDetailHolder(LayoutInflater.from(parent!!.context).inflate(R.layout.item_topic_header, parent, false))
         holder.onClickListener = {
             deleteActionCallback?.invoke()
+        }
+        holder.onIconClickListener={
+            iconClickListener?.invoke()
         }
         return holder
     }

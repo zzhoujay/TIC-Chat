@@ -19,6 +19,8 @@ class TopicDetailHolder(val root: View) : ClickableHolder(root) {
     val content: TextView
     val deleteAction: ImageButton
 
+    var onIconClickListener:(()->Unit)?=null
+
     init {
         icon = root.icon
         name = root.name
@@ -29,6 +31,9 @@ class TopicDetailHolder(val root: View) : ClickableHolder(root) {
 
         deleteAction.onClick {
             onClickListener?.invoke(adapterPosition)
+        }
+        icon.onClick {
+            onIconClickListener?.invoke()
         }
     }
 }

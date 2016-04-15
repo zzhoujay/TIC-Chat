@@ -46,7 +46,7 @@ class Category(var name: String = "", var index: Int = 0) : BmobObject() {
     override fun toString(): String = name
 }
 
-class Topic(var title: String = "", var content: String = "", var reply: Int = 0, var author: User, var category: Category,var state:Int=Topic.state_normal) : BmobObject() {
+class Topic(var title: String?=null, var content: String?=null, var reply: Int?=null, var author: User?=null, var category: Category?=null,var state:Int?=null) : BmobObject() {
     override fun toString(): String {
         return "Topic(title='$title', content='$content', reply=$reply, author=$author, category=$category, state=$state)"
     }

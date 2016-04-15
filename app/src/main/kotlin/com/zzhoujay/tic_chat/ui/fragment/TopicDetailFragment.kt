@@ -1,6 +1,7 @@
 package com.zzhoujay.tic_chat.ui.fragment
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
@@ -19,6 +20,7 @@ import cn.bmob.v3.listener.GetListener
 import com.zzhoujay.tic_chat.R
 import com.zzhoujay.tic_chat.common.Configuration
 import com.zzhoujay.tic_chat.data.*
+import com.zzhoujay.tic_chat.ui.activity.ProfileEditorActivity
 import com.zzhoujay.tic_chat.ui.adapter.ReplyAdapter
 import com.zzhoujay.tic_chat.ui.adapter.TopicDetailAdapter
 import com.zzhoujay.tic_chat.ui.adapter.holder.LoadMoreHolder
@@ -67,6 +69,11 @@ class TopicDetailFragment : ListFragment<Reply>() {
         val t = TopicDetailAdapter(dataAdapter)
         t.onStatusChangeListener = { if (it == LoadMoreHolder.State.loading) loadMore() }
         t.deleteActionCallback = { deleteCurrTopic() }
+        t.iconClickListener={
+            val intent=Intent(context,ProfileEditorActivity::class.java)
+            intent.putExtra(Profile.PROFILE,wrapperAdapter.topic?.author?.profile)
+            startActivity(intent)
+        }
         t
     }
     override val dataAdapter: ReplyAdapter by lazy {
@@ -127,7 +134,7 @@ class TopicDetailFragment : ListFragment<Reply>() {
                 dismiss()
                 if (code == 0) {
                     val topic = wrapperAdapter.topic
-                    val targetUser = topic!!.author
+                    val targetUser = topic!!.author!!
                     val fromUser = BmobUser.getCurrentUser(context, User::class.java)
                     if (!targetUser.equals(fromUser)) {
                         val message = Message(Message.type_reply_topic, fromUser, targetUser, topic, reply)
@@ -200,9 +207,9 @@ class TopicDetailFragment : ListFragment<Reply>() {
 
     private fun deleteCurrTopic() {
         progress(false, "正在删除中") {
-            val topic = wrapperAdapter.topic!!
+            val topic = Topic()
             topic.setValue("state", Topic.state_deleted)
-            topic.update(context, SimpleUpdateListener({ code, msg ->
+            topic.update(context, wrapperAdapter.topic?.objectId, SimpleUpdateListener({ code, msg ->
                 dismiss()
                 if (code == 0) {
                     activity.setResult(Activity.RESULT_OK)

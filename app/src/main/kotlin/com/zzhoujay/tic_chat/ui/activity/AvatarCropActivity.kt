@@ -19,5 +19,7 @@ class AvatarCropActivity : ToolBarActivity() {
         bundle.putParcelable(IMAGE_URI, intent.getParcelableExtra(IMAGE_URI))
         fragment.arguments = bundle
         currFragment = fragment
+
+        title="头像剪裁"
     }
 }

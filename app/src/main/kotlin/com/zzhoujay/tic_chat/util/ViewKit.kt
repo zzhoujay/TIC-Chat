@@ -1,5 +1,6 @@
 package com.zzhoujay.tic_chat.util
 
+import android.content.Context
 import android.support.v4.widget.SwipeRefreshLayout
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -14,12 +15,12 @@ object ViewKit {
     }
 
     fun showSoftInput(view: View) {
-        val imm = App.app.getSystemService(InputMethodManager::class.java)
+        val imm = App.app.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(view, InputMethodManager.SHOW_FORCED)
     }
 
     fun hideSoftInput(view: View) {
-        val imm = App.app.getSystemService(InputMethodManager::class.java)
+        val imm = App.app.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

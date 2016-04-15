@@ -80,7 +80,7 @@ class NewTopicFragment : BaseFragment() {
                 val title = titleLayout.editText!!.text.toString()
                 val content = contentLayout.editText!!.text.toString()
 
-                val topic = Topic(title, content, 0, BmobUser.getCurrentUser(context, User::class.java), selectedCategory!!)
+                val topic = Topic(title, content, 0, BmobUser.getCurrentUser(context, User::class.java), selectedCategory!!,Topic.state_normal)
 
                 topic.save(context, SimpleSaveListener({ code, msg ->
                     dismiss()

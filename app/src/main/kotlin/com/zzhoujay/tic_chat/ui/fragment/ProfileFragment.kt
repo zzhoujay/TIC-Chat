@@ -2,6 +2,7 @@ package com.zzhoujay.tic_chat.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.graphics.drawable.VectorDrawableCompat
 import android.text.Editable
 import android.util.Log
 import android.view.Gravity

@@ -36,6 +36,8 @@ class ProfileEditorActivity : ToolBarActivity() {
         }
         currFragment = fragment
 
+        title="个人资料"
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

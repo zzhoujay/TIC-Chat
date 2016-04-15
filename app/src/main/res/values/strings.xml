@@ -19,7 +19,7 @@
     <string name="title_message">消息</string>
     <string name="title_profile">资料</string>
 
-    <string name="title_detail">详情</string>
+    <string name="title_detail">主题详情</string>
 
     <string-array name="home_tabs">
         <item>@string/title_topic</item>

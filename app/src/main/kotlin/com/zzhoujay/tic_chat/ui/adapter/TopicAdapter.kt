@@ -30,9 +30,9 @@ class TopicAdapter() : NormalAdapter<Topic>() {
             holder.title.text = topic.title
             holder.content.text = topic.content
             holder.time.text = topic.updatedAt
-            val userProfile = topic.author.profile
-            holder.name.text = userProfile?.name
-            Glide.with(holder.icon.context).load(userProfile?.avatar?.getFileUrl(holder.icon.context)).into(holder.icon)
+            val userProfile = topic.author!!.profile
+            holder.name.text = userProfile.name
+            Glide.with(holder.icon.context).load(userProfile.avatar?.getFileUrl(holder.icon.context)).into(holder.icon)
         }
     }
 

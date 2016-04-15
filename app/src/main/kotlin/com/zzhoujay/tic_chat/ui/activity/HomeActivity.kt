@@ -1,7 +1,9 @@
 package com.zzhoujay.tic_chat.ui.activity
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.support.design.widget.CoordinatorLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.PagerAdapter
@@ -74,10 +76,13 @@ class HomeActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if ((requestCode == requestCodeNewTopic || requestCode == requestCodeTopicDetail) && resultCode == RESULT_OK) {
+        if (requestCode == requestCodeNewTopic && resultCode == RESULT_OK) {
             (fragments[0] as TopicsFragment).refresh()
         } else if (requestCode == requestCodeEditorProfile && resultCode == RESULT_OK) {
             (fragments[2] as ProfileFragment).refreshUserProfile()
+        } else if ( requestCode == requestCodeTopicDetail && resultCode == RESULT_OK) {
+            (fragments[0] as TopicsFragment).refresh()
+            (fragments[0] as TopicsFragment).gotoTop()
         }
     }
 

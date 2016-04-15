@@ -20,5 +20,7 @@ class AccountManagerActivity : ToolBarActivity() {
         }
 
         currFragment = fragment
+
+        title="账号管理"
     }
 }

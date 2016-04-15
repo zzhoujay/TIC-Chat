@@ -114,7 +114,7 @@ class TopicsFragment : ListFragment<Topic>() {
             query.setSkip(dataAdapter.itemCount)
         query.setLimit(loadMoreQuerySize)
         query.order("-updatedAt")
-        query.addWhereEqualTo("state",Topic.state_normal)
+        query.addWhereEqualTo("state", Topic.state_normal)
         if (category != null && !category.equals(wrapperAdapter.allCategory)) {
             query.addWhereEqualTo("category", category)
         }
@@ -144,6 +144,10 @@ class TopicsFragment : ListFragment<Topic>() {
                 }
             })
         }
+    }
+
+    fun gotoTop() {
+        useRecyclerView.scrollToPosition(0)
     }
 
     override fun createQuery(refresh: Boolean): BmobQuery<Topic> {

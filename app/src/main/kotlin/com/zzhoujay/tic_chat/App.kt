@@ -14,6 +14,7 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
+import com.tencent.bugly.crashreport.CrashReport
 import com.zzhoujay.tic_chat.common.ApiKey
 import com.zzhoujay.tic_chat.data.Installation
 import org.jetbrains.anko.toast
@@ -33,6 +34,8 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         app = this
+
+        CrashReport.initCrashReport(applicationContext, "900026646", false);
 
         Dexter.initialize(this)
 

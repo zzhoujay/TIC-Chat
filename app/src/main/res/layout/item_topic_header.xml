@@ -17,6 +17,7 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/icon"
+                style="@style/Clickable"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_centerVertical="true"

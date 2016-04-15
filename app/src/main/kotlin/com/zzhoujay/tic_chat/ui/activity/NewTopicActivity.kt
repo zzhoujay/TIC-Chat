@@ -15,5 +15,7 @@ class NewTopicActivity : ToolBarActivity() {
         super.onCreate(savedInstanceState)
         quickFinish = true
         currFragment = NewTopicFragment()
+
+        title="新建主题"
     }
 }

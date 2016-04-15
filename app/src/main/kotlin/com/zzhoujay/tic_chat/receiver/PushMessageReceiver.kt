@@ -31,7 +31,7 @@ class PushMessageReceiver : BroadcastReceiver() {
     }
 
     fun showNotification(context: Context) {
-        val notificationManager = context.getSystemService(NotificationManager::class.java)
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val intent = Intent(context, HomeActivity::class.java)
         intent.putExtra(HomeActivity.start_flag, HomeActivity.start_message)
         val pi = PendingIntent.getActivity(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT)
